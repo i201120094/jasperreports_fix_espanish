@@ -39,7 +39,7 @@
                 map = new google.maps.Map(document.getElementById(mapCanvasId), {
                     zoom: ${zoom},
                     center: {"lat": ${latitude}, "lng": ${longitude}},
-                    mapTypeId: google.maps.MapTypeId.${mapType},
+                    mapTypeId: "${mapType}",
                     disableDefaultUI: true,
                     // keyboardShortcuts: false,
                     gestureHandling: 'none'

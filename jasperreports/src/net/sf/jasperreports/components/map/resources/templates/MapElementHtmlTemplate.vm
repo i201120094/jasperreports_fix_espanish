@@ -30,8 +30,8 @@
 				defaultMarkerIcon = "${defaultMarkerIcon}",
 				map = new google.maps.Map(document.getElementById(mapCanvasId), {
 					zoom: ${zoom},
-					center: new google.maps.LatLng(${latitude}, ${longitude}),
-					mapTypeId: google.maps.MapTypeId.${mapType},
+					center: {lat: ${latitude}, lng: ${longitude} },
+					mapTypeId: "${mapType}",
 					autocloseinfo: true
 				});
 

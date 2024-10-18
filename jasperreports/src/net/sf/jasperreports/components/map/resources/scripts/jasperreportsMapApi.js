@@ -7,14 +7,6 @@ async function initMap() {
     if (typeof jasperreports.map === 'undefined') {
         var infowindow;
         jasperreports.map = {
-			createMap: function (mapCanvasId, zoom, latitude, longitude, mapType) {
-				return new Map(document.getElementById(mapCanvasId), {
-					"zoom": zoom,
-					"center": {"lat": latitude, "lng": longitude},
-					"mapTypeId": google.maps.MapTypeId[mapType],
-					autocloseinfo: true
-				});
-			},
             configureImage: function (parentKey, parentProps, parentOptions) {
                 var width, height, originX, originY, anchorX, anchorY, pp = parentProps, pk = parentKey;
 
