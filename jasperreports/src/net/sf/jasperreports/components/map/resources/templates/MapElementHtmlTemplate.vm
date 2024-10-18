@@ -23,7 +23,7 @@
 	</script>
 	#end
 	<script type="text/javascript">
-		window.addEventListener('DOMContentLoaded', () => {
+		jasperreportsObjectReady.then((jasperreports) => {
 			var globalUseMarkerClustering = ${useMarkerClustering},
 				globalUseMarkerSpidering = ${useMarkerSpidering},
 				mapCanvasId = "${mapCanvasId}",
