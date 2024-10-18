@@ -1,8 +1,20 @@
-function initMap() {
+let jasperreports;
+async function initMap() {
+	const { Map } =  await google.maps.importLibrary("maps");
+	const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
+	
     if (typeof jasperreports === 'undefined') jasperreports = {};
     if (typeof jasperreports.map === 'undefined') {
         var infowindow;
         jasperreports.map = {
+			createMap: function (mapCanvasId, zoom, latitude, longitude, mapType) {
+				return new Map(document.getElementById(mapCanvasId), {
+					"zoom": zoom,
+					"center": {"lat": latitude, "lng": longitude},
+					"mapTypeId": google.maps.MapTypeId[mapType],
+					autocloseinfo: true
+				});
+			},
             configureImage: function (parentKey, parentProps, parentOptions) {
                 var width, height, originX, originY, anchorX, anchorY, pp = parentProps, pk = parentKey;
 
@@ -29,9 +41,15 @@ function initMap() {
                         po = {
                             content: pp['infowindow.content']
                         };
-                    if (pp['infowindow.pixelOffset']) po['pixelOffset'] = pp['infowindow.pixelOffset'];
-                    if (pp['infowindow.latitude'] && pp['infowindow.longitude']) po['position'] = new gg.LatLng(pp['infowindow.latitude'], pp['infowindow.longitude']);
-                    if (pp['infowindow.maxWidth']) po['maxWidth'] = pp['infowindow.maxWidth'];
+                    if (pp['infowindow.pixelOffset']) {
+						po['pixelOffset'] = pp['infowindow.pixelOffset'];
+					}
+                    if (pp['infowindow.latitude'] && pp['infowindow.longitude']) {
+						po['position'] = {"lat": pp['infowindow.latitude'], "lng": pp['infowindow.longitude']};
+					}
+                    if (pp['infowindow.maxWidth']) {
+						po['maxWidth'] = pp['infowindow.maxWidth'];
+					}
                     return new gg.InfoWindow(po);
                 }
                 return null;
@@ -42,7 +60,7 @@ function initMap() {
                     var j;
                     for (var i = 0; i < markers.length; i++) {
                         var markerProps = markers[i];
-                        var markerLatLng = new google.maps.LatLng(markerProps['latitude'], markerProps['longitude']);
+                        var markerLatLng = {"lat": markerProps['latitude'], "lng": markerProps['longitude']};
                         var markerOptions = {
                             position: markerLatLng
                         };
@@ -62,7 +80,7 @@ function initMap() {
                         for (j in markerProps) {
                             if (j.indexOf(".") < 0 && markerProps.hasOwnProperty(j) && !markerOptions.hasOwnProperty(j)) markerOptions[j] = markerProps[j];
                         }
-                        var marker = new google.maps.Marker(markerOptions);
+                        var marker = new AdvancedMarkerElement(markerOptions);
 
                         // when in export mode, do not add unnecessary listener
                         if (!isForExport) {
@@ -93,7 +111,7 @@ function initMap() {
                                 var loc = props[prop];
                                 for (var j = 0; j < loc.length; j++) {
                                     var latln = loc[j];
-                                    l.push(new google.maps.LatLng(latln['latitude'], latln['longitude']));
+                                    l.push({"lat": latln['latitude'], "lng": latln['longitude']});
                                 }
                             } else if (prop === 'isPolygon') {
                                 isPoly = this.getBooleanValue(props[prop]);
@@ -410,3 +428,5 @@ function initMap() {
         }
     }
 }
+
+//initMap();

@@ -12,13 +12,13 @@
 #if (!${gotReportContext})
 	#if (${exporterFirstAttempt})
 		#if(${reqParams})
-	<script src='https://maps.googleapis.com/maps/api/js?${reqParams}&callback=initMap' defer></script>
+	<script src='https://maps.googleapis.com/maps/api/js?${reqParams}&libraries=maps,marker&callback=initMap' defer></script>
 		#else
-	<script src='https://maps.googleapis.com/maps/api/js?callback=initMap' defer></script>
+	<script src='https://maps.googleapis.com/maps/api/js?libraries=maps,marker&callback=initMap' defer></script>
 		#end
 	<script src='https://unpkg.com/@googlemaps/markerclusterer/dist/index.min.js' defer></script>
 	<script src='https://cdnjs.cloudflare.com/ajax/libs/OverlappingMarkerSpiderfier/1.0.3/oms.min.js' defer></script>
-	<script type="text/javascript">
+	<script>
 		${jasperreportsMapApiScript}
 	</script>
 	#end

@@ -460,6 +460,24 @@ public class MapFillComponent extends BaseFillComponent implements FillContextPr
 		String reqParams = getReqParams();
 		if(reqParams != null && reqParams.trim().length() > 0) {
 			printElement.setParameterValue(MapComponent.PARAMETER_REQ_PARAMS, reqParams);
+			if (language != null && language.trim().length() > 0) {
+				printElement.setParameterValue(MapComponent.PARAMETER_LANGUAGE, language);
+			}
+			if (key != null && key.trim().length() > 0) {
+				printElement.setParameterValue(MapComponent.PROPERTY_KEY, key);
+			}
+			if (clientId != null && clientId.trim().length() > 0) {
+				printElement.setParameterValue(MapComponent.PARAMETER_CLIENT, clientId);
+			}
+			if (signature != null && signature.trim().length() > 0) {
+				printElement.setParameterValue(MapComponent.PROPERTY_SIGNATURE, signature);
+			}
+			if(googleVersion != null && googleVersion.trim().length() > 0) {
+				printElement.setParameterValue(MapComponent.PARAMETER_V, googleVersion);
+			} else if(version != null && version.trim().length() > 0 && (version.indexOf('.') < 0 || version.indexOf(".exp") > -1)) {
+				// avoiding name collision of the version property
+				printElement.setParameterValue(MapComponent.PARAMETER_V, version);
+			}
 		}
 		if (defaultMarkerIcon != null && defaultMarkerIcon.trim().length() > 0) {
 			printElement.setParameterValue(MapComponent.PARAMETER_DEFAULT_MARKER_ICON, defaultMarkerIcon);
@@ -522,6 +540,7 @@ public class MapFillComponent extends BaseFillComponent implements FillContextPr
 				rParams += "&key=" + key;
 			}
 			
+			rParams += "&loading=async&libraries=maps,marker";
 			if(googleVersion != null && googleVersion.trim().length() > 0) {
 				rParams += "&v=" + googleVersion;
 			} else if(version != null && version.trim().length() > 0 && (version.indexOf('.') < 0 || version.indexOf(".exp") > -1)) {

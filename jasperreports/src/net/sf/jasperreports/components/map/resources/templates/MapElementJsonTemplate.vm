@@ -4,6 +4,11 @@
     "module": "jasperreports-map",
     "instanceData" : {
         "requestParams": "${reqParams}",
+        "key": "${key}",
+        "language": "${language}",
+        "v": "${v}",
+        "client": "${client}",
+        "signature": "${signature}",
         "latitude": ${latitude},
         "longitude": ${longitude},
         "zoom": ${zoom},

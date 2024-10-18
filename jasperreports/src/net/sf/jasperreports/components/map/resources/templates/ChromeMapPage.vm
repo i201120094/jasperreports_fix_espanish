@@ -14,9 +14,9 @@
         }
     </style>
 #if(${reqParams})
-    <script src='https://maps.googleapis.com/maps/api/js?${reqParams}&callback=initMap' defer></script>
+    <script src='https://maps.googleapis.com/maps/api/js?${reqParams}&libraries=maps,marker&callback=initMap' defer></script>
 #else
-    <script src='https://maps.googleapis.com/maps/api/js?callback=initMap' defer></script>
+    <script src='https://maps.googleapis.com/maps/api/js?libraries=maps,marker&callback=initMap' defer></script>
 #end
 #if(${useMarkerClustering})
     <script src='https://unpkg.com/@googlemaps/markerclusterer/dist/index.min.js' defer></script>
@@ -38,7 +38,7 @@
                 defaultMarkerIcon = "${defaultMarkerIcon}",
                 map = new google.maps.Map(document.getElementById(mapCanvasId), {
                     zoom: ${zoom},
-                    center: new google.maps.LatLng(${latitude}, ${longitude}),
+                    center: {"lat": ${latitude}, "lng": ${longitude}},
                     mapTypeId: google.maps.MapTypeId.${mapType},
                     disableDefaultUI: true,
                     // keyboardShortcuts: false,

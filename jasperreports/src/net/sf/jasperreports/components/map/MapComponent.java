@@ -643,6 +643,16 @@ public interface MapComponent extends Component, JRCloneable
 	public static final String PARAMETER_LANGUAGE = "language";
 	
 	/**
+	 * The name of the parameter that provides the Google API version.
+	 */
+	public static final String PARAMETER_V = "v";
+	
+	/**
+	 * The name of the parameter that provides the client ID.
+	 */
+	public static final String PARAMETER_CLIENT = "client";
+	
+	/**
 	 * The name of the parameter that provides the zoom factor.
 	 */
 	public static final String PARAMETER_ZOOM = "zoom";
