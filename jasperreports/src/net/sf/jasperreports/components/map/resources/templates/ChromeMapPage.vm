@@ -52,6 +52,7 @@
                     zoom: ${zoom},
                     center: {"lat": ${latitude}, "lng": ${longitude}},
                     mapTypeId: "${mapType}",
+                    mapId: mapCanvasId,
                     disableDefaultUI: true,
                     // keyboardShortcuts: false,
                     gestureHandling: 'none'

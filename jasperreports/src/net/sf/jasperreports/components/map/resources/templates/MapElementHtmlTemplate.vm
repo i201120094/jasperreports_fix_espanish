@@ -31,6 +31,7 @@
 				map = new google.maps.Map(document.getElementById(mapCanvasId), {
 					zoom: ${zoom},
 					center: {lat: ${latitude}, lng: ${longitude} },
+					mapId: mapCanvasId,
 					mapTypeId: "${mapType}",
 					autocloseinfo: true
 				});

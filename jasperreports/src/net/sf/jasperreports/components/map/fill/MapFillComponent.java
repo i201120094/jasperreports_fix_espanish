@@ -540,14 +540,14 @@ public class MapFillComponent extends BaseFillComponent implements FillContextPr
 				rParams += "&key=" + key;
 			}
 			
-			rParams += "&loading=async&libraries=maps,marker";
+			//rParams += "&loading=async";
 			if(googleVersion != null && googleVersion.trim().length() > 0) {
 				rParams += "&v=" + googleVersion;
 			} else if(version != null && version.trim().length() > 0 && (version.indexOf('.') < 0 || version.indexOf(".exp") > -1)) {
 				// avoiding name collision of the version property
 				rParams += "&v=" + version;
 			}
-			reqParams = rParams.length() == 0 ? null : rParams.substring(1);
+			reqParams = rParams.length() == 0 ? null : rParams.substring(1) + "&loading=async";
 		}
 		return reqParams;
 	}

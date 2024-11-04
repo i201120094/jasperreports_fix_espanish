@@ -4,11 +4,16 @@ const jasperreportsObjectReady = new Promise((resolve, reject) => {
 });
 
 async function initMap() {
-	const { Map } =  await google.maps.importLibrary("maps");
-	const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
+	const { Map, InfoWindow } =  await google.maps.importLibrary("maps");
+	const { AdvancedMarkerElement, PinElement } = await google.maps.importLibrary("marker");
 	
     const jasperreports = {};
     let infowindow;
+    const replacements = {
+		latitude: "lat",
+		longitude: "lng",
+		icon: "glyph"
+	};
     jasperreports.map = {
         configureImage: function (parentKey, parentProps, parentOptions) {
             var width, height, originX, originY, anchorX, anchorY, pp = parentProps, pk = parentKey;
@@ -23,11 +28,51 @@ async function initMap() {
             anchorY = pp[pk + '.anchor.y'] ? parseInt(pp[pk + '.anchor.y']) : 0;
 
             parentOptions[pk] = {
-                url: pp[pk + '.url'],
-                size: width && height ? new google.maps.Size(width, height) : null,
-                origin: new google.maps.Point(originX, originY),
-                anchor: new google.maps.Point(anchorX, anchorY)
+                url: pp[pk + '.url']
+                //size: width && height ? new google.maps.Size(width, height) : null,
+               // origin: new google.maps.Point(originX, originY),
+                //anchor: new google.maps.Point(anchorX, anchorY)
             };
+        },
+        configurePinElementFromIcon: function (parentKey, parentProps, parentOptions) {
+            var width, height, originX, originY, anchorX, anchorY, 
+            pp = parentProps, 
+            pk = parentKey.indexOf(".url") < 0 ? parentKey : parentKey.substring(0, parentKey.indexOf(".url")+1);;
+
+            width = parentProps[pk + '.width'] ? parseInt(parentProps[pk + '.width']) : null;
+            height = parentProps[pk + '.height'] ? parseInt(parentProps[pk + '.height']) : null;
+
+            originX = parentProps[pk + '.origin.x'] ? parseInt(parentProps[pk + '.origin.x']) : 0;
+            originY = parentProps[pk + '.origin.y'] ? parseInt(parentProps[pk + '.origin.y']) : 0;
+
+            anchorX = parentProps[pk + '.anchor.x'] ? parseInt(parentProps[pk + '.anchor.x']) : 0;
+            anchorY = parentProps[pk + '.anchor.y'] ? parseInt(parentProps[pk + '.anchor.y']) : 0;
+
+            parentOptions.content = new PinElement({
+                glyph: parentProps[parentKey]
+                //size: width && height ? new google.maps.Size(width, height) : null,
+                //origin: new google.maps.Point(originX, originY),
+                //anchor: new google.maps.Point(anchorX, anchorY)
+            }).element;
+        },
+        configurePinElementFromColor: function (parentKey, parentProps, parentOptions) {
+            var pp = parentProps, pk = parentKey;
+
+            parentOptions.content = new PinElement({
+                glyphColor: parentProps[pk],
+                scale: parentProps["size"] 
+                	? (parentProps["size"] === "tiny" 
+                		? 0.25 
+                		: (parentProps["size"] === "small" 
+                			? 0.5 
+                			:(parentProps["size"] === "mid" 
+                				? 0.75 
+                				: 1.0))) 
+                	: 1.0,
+            }).element;
+        },
+        configureDefaultPinElement: function (parentOptions) {
+            parentOptions.content = new PinElement().element;
         },
         createInfo: function (parentProps) {
             var pp = parentProps;
@@ -65,15 +110,19 @@ async function initMap() {
                         markerOptions.map = map;
                     }
 
-                    if (markerProps['icon.url'] && markerProps['icon.url'].length > 0) this.configureImage('icon', markerProps, markerOptions);
-                    else if (markerProps['icon'] && markerProps['icon'].length > 0) markerOptions['icon'] = markerProps['icon'];
-                    else if (markerProps['color'] && markerProps['color'].length > 0) {
-                        markerOptions['icon'] = 'https://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%7C' + markerProps['color'];
-                    }
-                    if (markerProps['shadow.url'] && markerProps['shadow.url'].length > 0) this.configureImage('shadow', markerProps, markerOptions);
+                    if (markerProps['icon.url'] && markerProps['icon.url'].length > 0) {
+						this.configurePinElementFromIcon('icon.url', markerProps, markerOptions);
+					} else if (markerProps['icon'] && markerProps['icon'].length > 0) {
+						this.configurePinElementFromIcon('icon', markerProps, markerOptions);
+					} else if (markerProps['color'] && markerProps['color'].length > 0) {
+						this.configurePinElementFromColor('color', markerProps, markerOptions);
+                    } else {
+						this.configureDefaultPinElement(markerProps, markerOptions);
+					}
+                    if (markerProps['shadow.url'] && markerProps['shadow.url'].length > 0) this.configurePinElementFromIcon('shadow.url', markerProps, markerOptions);
                     else if (markerProps['shadow'] && markerProps['shadow'].length > 0) markerOptions['shadow'] = markerProps['shadow'];
                     for (j in markerProps) {
-                        if (j.indexOf(".") < 0 && markerProps.hasOwnProperty(j) && !markerOptions.hasOwnProperty(j)) markerOptions[j] = markerProps[j];
+                        if (j!== "latitude" && j!=="longitude" && j!=="size" && j!=="label" && j!=="color" && j!=="url" && j!=="target" && j.indexOf(".") < 0 && markerProps.hasOwnProperty(j) && !markerOptions.hasOwnProperty(j)) markerOptions[j] = markerProps[j];
                     }
                     var marker = new AdvancedMarkerElement(markerOptions);
 
@@ -321,7 +370,7 @@ async function initMap() {
                     if (legendUseMarkerIcons) {
                         var legendMarkerIcon = markerSeriesConfigBySeriesName[seriesName].legendIcon;
                         if (!legendMarkerIcon) {
-                            legendMarkerIcon = markerSeriesConfigBySeriesName[seriesName].googleMarkers[0].getIcon();
+                            legendMarkerIcon = markerSeriesConfigBySeriesName[seriesName].googleMarkers[0].content;
                         }
                         if (!legendMarkerIcon) {
                             legendMarkerIcon = defaultMarkerIcon;
@@ -419,7 +468,13 @@ async function initMap() {
                 }
             }
             return props;
-        }
+        },
+        replaceKey: function(oldKey) {
+			if(replacements[oldKey]) {
+				return replacements[oldKey];
+			}
+			return oldKey;
+		}
     }
 
     __jr_promise_methods.resolve(jasperreports);
