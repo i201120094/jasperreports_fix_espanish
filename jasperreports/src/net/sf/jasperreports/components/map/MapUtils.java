@@ -53,7 +53,7 @@ public class MapUtils {
         zoom = zoom == null ? MapComponent.DEFAULT_ZOOM : zoom;
 
         String mapType = (String) element.getParameterValue(MapComponent.ATTRIBUTE_MAP_TYPE);
-        mapType = (mapType == null ? MapComponent.DEFAULT_MAP_TYPE.getName() : mapType).toUpperCase();
+        mapType = (mapType == null ? MapComponent.DEFAULT_MAP_TYPE.getName() : mapType).toLowerCase();
 
         Boolean markerClustering = (Boolean) element.getParameterValue(MapComponent.ATTRIBUTE_MARKER_CLUSTERING);
         markerClustering = markerClustering != null ? markerClustering.booleanValue() : false;
