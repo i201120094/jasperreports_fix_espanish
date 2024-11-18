@@ -1643,8 +1643,8 @@ public class JRPdfExporter extends JRAbstractExporter<PdfReportConfiguration, Pd
 				pxImage.scaleAbsolute(printImage.getWidth(), printImage.getHeight());
 				PdfChunk pxChunk = pdfProducer.createChunk(pxImage);
 
-				setAnchor(pxChunk, printImage, printImage);
-				setHyperlinkInfo(pxChunk, printImage);
+				boolean wasHyperlinkSet = setAnchor(pxChunk, printImage, printImage);
+				wasHyperlinkSet = setHyperlinkInfo(pxChunk, printImage) || wasHyperlinkSet;
 
 				tagHelper.startImage(printImage);
 				
@@ -1663,17 +1663,20 @@ public class JRPdfExporter extends JRAbstractExporter<PdfReportConfiguration, Pd
 					TextDirection.DEFAULT
 					);
 
-				PdfPhrase pxPhrase = pdfProducer.createPhrase(pxChunk);
-				pxPhrase.go(
-					printImage.getX() + getOffsetX(),
-					pageFormat.getPageHeight() - printImage.getY() - getOffsetY(),
-					printImage.getX() + getOffsetX() + printImage.getWidth(),
-					pageFormat.getPageHeight() - printImage.getY() - getOffsetY() - printImage.getHeight(),
-					0,
-					0,
-					PdfTextAlignment.LEFT,
-					TextDirection.DEFAULT
-					);
+				if (wasHyperlinkSet)
+				{
+					PdfPhrase pxPhrase = pdfProducer.createPhrase(pxChunk);
+					pxPhrase.go(
+						printImage.getX() + getOffsetX(),
+						pageFormat.getPageHeight() - printImage.getY() - getOffsetY(),
+						printImage.getX() + getOffsetX() + printImage.getWidth(),
+						pageFormat.getPageHeight() - printImage.getY() - getOffsetY() - printImage.getHeight(),
+						0,
+						0,
+						PdfTextAlignment.LEFT,
+						TextDirection.DEFAULT
+						);
+				}
 	
 				tagHelper.endImage();
 			}
@@ -2151,8 +2154,10 @@ public class JRPdfExporter extends JRAbstractExporter<PdfReportConfiguration, Pd
 	/**
 	 *
 	 */
-	protected void setHyperlinkInfo(PdfChunk chunk, JRPrintHyperlink link)
+	protected boolean setHyperlinkInfo(PdfChunk chunk, JRPrintHyperlink link)
 	{
+		boolean wasHyperlinkSet = false;
+
 		if (link != null)
 		{
 			Boolean ignoreHyperlink = HyperlinkUtil.getIgnoreHyperlink(PdfReportConfiguration.PROPERTY_IGNORE_HYPERLINK, link);
@@ -2169,7 +2174,7 @@ public class JRPdfExporter extends JRAbstractExporter<PdfReportConfiguration, Pd
 					{
 						JRHyperlinkProducer hyperlinkProducer = getHyperlinkProducer(link);
 						String referenceURL = hyperlinkProducer == null ? link.getHyperlinkReference() : hyperlinkProducer.getHyperlink(link);
-						setReferenceHyperlink(chunk, link, referenceURL);
+						wasHyperlinkSet = setReferenceHyperlink(chunk, link, referenceURL);
 						break;
 					}
 					case LOCAL_ANCHOR :
@@ -2177,6 +2182,7 @@ public class JRPdfExporter extends JRAbstractExporter<PdfReportConfiguration, Pd
 						if (link.getHyperlinkAnchor() != null)
 						{
 							chunk.setLocalGoto(link.getHyperlinkAnchor());
+							wasHyperlinkSet = true;
 						}
 						break;
 					}
@@ -2185,6 +2191,7 @@ public class JRPdfExporter extends JRAbstractExporter<PdfReportConfiguration, Pd
 						if (link.getHyperlinkPage() != null)
 						{
 							chunk.setLocalGoto(JR_PAGE_ANCHOR_PREFIX + reportIndex + "_" + link.getHyperlinkPage().toString());
+							wasHyperlinkSet = true;
 						}
 						break;
 					}
@@ -2199,6 +2206,7 @@ public class JRPdfExporter extends JRAbstractExporter<PdfReportConfiguration, Pd
 								link.getHyperlinkReference(),
 								link.getHyperlinkAnchor()
 								);
+							wasHyperlinkSet = true;
 						}
 						break;
 					}
@@ -2213,6 +2221,7 @@ public class JRPdfExporter extends JRAbstractExporter<PdfReportConfiguration, Pd
 								link.getHyperlinkReference(),
 								link.getHyperlinkPage()
 								);
+							wasHyperlinkSet = true;
 						}
 						break;
 					}
@@ -2222,7 +2231,7 @@ public class JRPdfExporter extends JRAbstractExporter<PdfReportConfiguration, Pd
 						if (hyperlinkProducerFactory != null)
 						{
 							String hyperlink = hyperlinkProducerFactory.produceHyperlink(link);
-							setReferenceHyperlink(chunk, link, hyperlink);
+							wasHyperlinkSet = setReferenceHyperlink(chunk, link, hyperlink);
 						}
 						break;
 					}
@@ -2234,10 +2243,14 @@ public class JRPdfExporter extends JRAbstractExporter<PdfReportConfiguration, Pd
 				}
 			}
 		}
+
+		return wasHyperlinkSet;
 	}
 
-	protected void setReferenceHyperlink(PdfChunk chunk, JRPrintHyperlink link, String referenceURL)
+	protected boolean setReferenceHyperlink(PdfChunk chunk, JRPrintHyperlink link, String referenceURL)
 	{
+		boolean wasHyperlinkSet = false;
+
 		if (referenceURL != null)
 		{
 			switch(link.getHyperlinkTargetValue())
@@ -2251,6 +2264,7 @@ public class JRPdfExporter extends JRAbstractExporter<PdfReportConfiguration, Pd
 									+ "{this.getURL(\"" + referenceURL + "\");}"
 									+ "else {app.launchURL(\"" + referenceURL + "\", true);};"
 							);
+						wasHyperlinkSet = true;
 						break;
 					}
 				}
@@ -2258,10 +2272,13 @@ public class JRPdfExporter extends JRAbstractExporter<PdfReportConfiguration, Pd
 				default :
 				{
 					chunk.setAnchor(referenceURL);
+					wasHyperlinkSet = true;
 					break;
 				}
 			}
 		}
+
+		return wasHyperlinkSet;
 	}
 	
 	@Override
@@ -3376,8 +3393,10 @@ public class JRPdfExporter extends JRAbstractExporter<PdfReportConfiguration, Pd
 	}
 
 
-	protected void setAnchor(PdfChunk chunk, JRPrintAnchor anchor, JRPrintElement element)
+	protected boolean setAnchor(PdfChunk chunk, JRPrintAnchor anchor, JRPrintElement element)
 	{
+		boolean anchorSet = false;
+
 		String anchorName = anchor.getAnchorName();
 		
 		if (anchorName == null)
@@ -3399,7 +3418,11 @@ public class JRPdfExporter extends JRAbstractExporter<PdfReportConfiguration, Pd
 						: getOffsetX() + element.getX();
 				addBookmark(anchor.getBookmarkLevel(), anchorName, x, y);
 			}
+
+			anchorSet = true;
 		}
+
+		return anchorSet;
 	}
 
 
