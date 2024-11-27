@@ -120,7 +120,7 @@ Note: The Google Maps API v3 must be included *before* this code
     };
 
     p['addMarker'] = function(marker, spiderClickHandler) {
-      marker.setMap(this.map);
+      marker.map = this.map;
       return this['trackMarker'](marker, spiderClickHandler);
     };
 
@@ -169,7 +169,7 @@ Note: The Google Maps API v3 must be included *before* this code
       if (this.spiderfying || this.unspiderfying) {
         return;
       }
-      if ((marker['_omsData'] != null) && (positionChanged || !marker.getVisible())) {
+      if ((marker['_omsData'] != null) && (positionChanged || marker.map == null)) {
         this['unspiderfy'](positionChanged ? marker : null);
       }
       return this.formatMarkers();
@@ -181,7 +181,7 @@ Note: The Google Maps API v3 must be included *before* this code
 
     p['removeMarker'] = function(marker) {
       this['forgetMarker'](marker);
-      return marker.setMap(null);
+      return marker.map = null;
     };
 
     p['forgetMarker'] = function(marker) {
@@ -210,7 +210,7 @@ Note: The Google Maps API v3 must be included *before* this code
       this['forgetAllMarkers']();
       for (l = 0, len1 = markers.length; l < len1; l++) {
         marker = markers[l];
-        marker.setMap(null);
+        marker.map = null;
       }
       return this;
     };
@@ -308,7 +308,7 @@ Note: The Google Maps API v3 must be included *before* this code
         ref1 = this.markers;
         for (l = 0, len1 = ref1.length; l < len1; l++) {
           m = ref1[l];
-          if (!((m.map != null) && m.getVisible())) {
+          if (m.map == null) {
             continue;
           }
           mPt = this.llToPt(m.position);
@@ -344,7 +344,7 @@ Note: The Google Maps API v3 must be included *before* this code
       ref1 = this.markers;
       for (l = 0, len1 = ref1.length; l < len1; l++) {
         m = ref1[l];
-        if (m === marker || (m.map == null) || !m.getVisible()) {
+        if (m === marker || (m.map == null)) {
           continue;
         }
         mPt = this.llToPt((ref2 = (ref3 = m['_omsData']) != null ? ref3.usualPosition : void 0) != null ? ref2 : m.position);
@@ -381,7 +381,7 @@ Note: The Google Maps API v3 must be included *before* this code
       ref1 = this.markers;
       for (i1 = l = 0, len1 = ref1.length; l < len1; i1 = ++l) {
         m1 = ref1[i1];
-        if (!((m1.getMap() != null) && m1.getVisible())) {
+        if (m1.map == null) {
           continue;
         }
         m1Data = mData[i1];
@@ -394,7 +394,7 @@ Note: The Google Maps API v3 must be included *before* this code
           if (i2 === i1) {
             continue;
           }
-          if (!((m2.getMap() != null) && m2.getVisible())) {
+          if (m2.map == null) {
             continue;
           }
           m2Data = mData[i2];
@@ -530,8 +530,8 @@ Note: The Google Maps API v3 must be included *before* this code
             zIndex: this['usualLegZIndex']
           });
           marker['_omsData'] = {
-            usualPosition: marker.getPosition(),
-            usualZIndex: marker.getZIndex(),
+            usualPosition: marker.position,
+            usualZIndex: marker.zIndex,
             leg: leg
           };
           if (this['legColors']['highlighted'][this.map.mapTypeId] !== this['legColors']['usual'][this.map.mapTypeId]) {
@@ -542,8 +542,8 @@ Note: The Google Maps API v3 must be included *before* this code
             };
           }
           this.trigger('format', marker, this.constructor['markerStatus']['SPIDERFIED']);
-          marker.setPosition(footLl);
-          marker.setZIndex(Math.round(this['spiderfiedZIndex'] + footPt.y));
+          marker.position = footLl;
+          marker.zIndex = Math.round(this['spiderfiedZIndex'] + footPt.y);
           results.push(marker);
         }
         return results;
@@ -570,9 +570,9 @@ Note: The Google Maps API v3 must be included *before* this code
         if (marker['_omsData'] != null) {
           marker['_omsData'].leg.setMap(null);
           if (marker !== markerNotToMove) {
-            marker.setPosition(marker['_omsData'].usualPosition);
+            marker.position = marker['_omsData'].usualPosition;
           }
-          marker.setZIndex(marker['_omsData'].usualZIndex);
+          marker.zIndex = marker['_omsData'].usualZIndex;
           listeners = marker['_omsData'].hightlightListeners;
           if (listeners != null) {
             ge.removeListener(listeners.highlight);
