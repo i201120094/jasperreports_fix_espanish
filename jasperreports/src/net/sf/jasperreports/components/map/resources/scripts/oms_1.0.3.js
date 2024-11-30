@@ -7,12 +7,11 @@ Released under the MIT licence: http://opensource.org/licenses/mit-license
 Note: The Google Maps API v3 must be included *before* this code
  */
 
-(function() {
-  var callbackName, callbackRegEx, ref, ref1, scriptTag, tag,
-    hasProp = {}.hasOwnProperty,
+define("overlappingMarkerSpiderfierApi", function() {
+  var hasProp = {}.hasOwnProperty,
     slice = [].slice;
 
-  this['OverlappingMarkerSpiderfier'] = (function() {
+  window['OverlappingMarkerSpiderfier'] = (function() {
     var ge, gm, j, len, mt, p, ref, twoPi, x;
 
     p = _Class.prototype;
@@ -651,37 +650,4 @@ Note: The Google Maps API v3 must be included *before* this code
     return _Class;
 
   })();
-
-  callbackRegEx = /(\?.*(&|&amp;)|\?)spiderfier_callback=(\w+)/;
-
-  scriptTag = document.currentScript;
-
-  if (scriptTag == null) {
-    scriptTag = ((function() {
-      var j, len, ref, ref1, results;
-      ref = document.getElementsByTagName('script');
-      results = [];
-      for (j = 0, len = ref.length; j < len; j++) {
-        tag = ref[j];
-        if ((ref1 = tag.getAttribute('src')) != null ? ref1.match(callbackRegEx) : void 0) {
-          results.push(tag);
-        }
-      }
-      return results;
-    })())[0];
-  }
-
-  if (scriptTag != null) {
-    callbackName = (ref = scriptTag.getAttribute('src')) != null ? (ref1 = ref.match(callbackRegEx)) != null ? ref1[3] : void 0 : void 0;
-    if (callbackName) {
-      if (typeof window[callbackName] === "function") {
-        window[callbackName]();
-      }
-    }
-  }
-
-  if (typeof window['spiderfier_callback'] === "function") {
-    window['spiderfier_callback']();
-  }
-
-}).call(this);
+});
