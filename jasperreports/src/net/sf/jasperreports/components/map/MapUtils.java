@@ -35,6 +35,8 @@ import java.util.Map;
  */
 public class MapUtils {
     public static final String MAP_API_SCRIPT = "net/sf/jasperreports/components/map/resources/scripts/jasperreportsMapApi.js";
+    public static final String EXTERNAL_SCRIPT_LOAD_API_SCRIPT = "net/sf/jasperreports/components/map/resources/scripts/externalScriptLoadApi.js";
+    public static final String OVERLAPPING_MARKER_SPIDERFIER_SCRIPT = "net/sf/jasperreports/components/map/resources/scripts/oms_1.0.3.js";
 
     public static void prepareContextForVelocityTemplate(
             Map<String, Object> velocityContext,
@@ -85,9 +87,11 @@ public class MapUtils {
         velocityContext.put("pathsList", paths);
 
         String reqParams = (String)element.getParameterValue(MapComponent.PARAMETER_REQ_PARAMS);
+        String googleMapsApiUrl = "https://maps.googleapis.com/maps/api/js";
         if (reqParams != null) {
-            velocityContext.put(MapComponent.PARAMETER_REQ_PARAMS, reqParams);
+            googleMapsApiUrl += "?" + reqParams;
         }
+        velocityContext.put("googleMapsApiUrl", googleMapsApiUrl);
 
         String defaultMarkerIcon = (String)element.getParameterValue(MapComponent.PARAMETER_DEFAULT_MARKER_ICON);
         velocityContext.put(MapComponent.PARAMETER_DEFAULT_MARKER_ICON, defaultMarkerIcon != null ? defaultMarkerIcon: "");

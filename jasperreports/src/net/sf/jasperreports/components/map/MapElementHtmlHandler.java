@@ -71,6 +71,8 @@ public class MapElementHtmlHandler implements GenericElementHtmlHandler
         if (reportContext == null)
         {
             contextMap.put("jasperreportsMapApiScript", VelocityUtil.processTemplate(MapUtils.MAP_API_SCRIPT, (VelocityContext) null));
+            contextMap.put("externalScriptLoadApi", VelocityUtil.processTemplate(MapUtils.EXTERNAL_SCRIPT_LOAD_API_SCRIPT, (VelocityContext) null));
+            contextMap.put("overlappingMarkerSpiderfierScript", VelocityUtil.processTemplate(MapUtils.OVERLAPPING_MARKER_SPIDERFIER_SCRIPT, (VelocityContext) null));
             MapUtils.prepareContextForVelocityTemplate(contextMap, context.getJasperReportsContext(), element);
 
             if (context.getValue(FIRST_ATTEMPT_PARAM) == null)
