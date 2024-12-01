@@ -3,14 +3,8 @@
     "type": "googlemap",
     "module": "jasperreports-map",
     "instanceData" : {
-        "requestParams": "${reqParams}",
-        "key": "${key}",
-        "language": "${language}",
-        "v": "${v}",
-        "client": "${client}",
-        "signature": "${signature}",
-        "lat": ${latitude},
-        "lng": ${longitude},
+        "latitude": ${latitude},
+        "longitude": ${longitude},
         "zoom": ${zoom},
         "mapType": "${mapType}",
         "useMarkerClustering": ${useMarkerClustering},
@@ -19,6 +13,10 @@
         "markerList": ${markerList},
         "pathsList": ${pathsList},
         "legendProperties": ${legendProperties},
-        "resetMapProperties": ${resetMapProperties}
+        "resetMapProperties": ${resetMapProperties},
+        "googleMapsApiUrl": "${googleMapsApiUrl}",
+        "markerClustererApiUrl": "${markerClustererApiUrl}",
+        "jasperreportsMapApiScriptLocation": "${jasperreportsMapApiScriptLocation}",
+        "overlappingMarkerSpiderfierApiScriptLocation": "${overlappingMarkerSpiderfierApiScriptLocation}"
     }
 }

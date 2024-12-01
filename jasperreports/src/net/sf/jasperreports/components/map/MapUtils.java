@@ -87,11 +87,13 @@ public class MapUtils {
         velocityContext.put("pathsList", paths);
 
         String reqParams = (String)element.getParameterValue(MapComponent.PARAMETER_REQ_PARAMS);
-        String googleMapsApiUrl = "https://maps.googleapis.com/maps/api/js";
+        String googleMapsApiUrl = "https://maps.googleapis.com/maps/api/js"; //FIXME: make this URL configurable via props
         if (reqParams != null) {
             googleMapsApiUrl += "?" + reqParams;
         }
         velocityContext.put("googleMapsApiUrl", googleMapsApiUrl);
+        velocityContext.put("markerClustererApiUrl",
+                "https://unpkg.com/@googlemaps/markerclusterer/dist/index.min.js"); //FIXME: make this URL configurable via props
 
         String defaultMarkerIcon = (String)element.getParameterValue(MapComponent.PARAMETER_DEFAULT_MARKER_ICON);
         velocityContext.put(MapComponent.PARAMETER_DEFAULT_MARKER_ICON, defaultMarkerIcon != null ? defaultMarkerIcon: "");

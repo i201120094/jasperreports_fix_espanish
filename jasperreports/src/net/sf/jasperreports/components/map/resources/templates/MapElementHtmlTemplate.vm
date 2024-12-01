@@ -14,6 +14,11 @@
 	<script>
 		${externalScriptLoadApi}
 
+		let __jr_map_config__ = {
+			${mapConfig}
+		};
+		__jr_map_config__ = __jr_map_config__["${mapCanvasId}"];
+
 		const __jr__modules__ = new Map();
 		let __jr__define__;
 
@@ -47,63 +52,22 @@
 		};
 
 		__jr__define__("googleMapsApi", function() {
-			return __jr__jsonp__load__script__("${googleMapsApiUrl}");
+			return __jr__jsonp__load__script__(__jr_map_config__.instanceData.googleMapsApiUrl);
 		});
 
 		__jr__define__("markerClustererApi", function() {
-			return __jr__load__script__("https://unpkg.com/@googlemaps/markerclusterer/dist/index.min.js");
+			return __jr__load__script__(__jr_map_config__.instanceData.markerClustererApiUrl);
 		});
 	</script>
 	#end
 	<script type="text/javascript">
 		__jr__require__(["jasperreportsMapApi", "googleMapsApi", "markerClustererApi", "overlappingMarkerSpiderfierApi"], async (promiseReturnArr) => {
 			const jasperreports = await promiseReturnArr[0]();
-
-			var globalUseMarkerClustering = ${useMarkerClustering},
-					globalUseMarkerSpidering = ${useMarkerSpidering},
-					mapCanvasId = "${mapCanvasId}",
-					defaultMarkerIcon = "${defaultMarkerIcon}",
-					map = new google.maps.Map(document.getElementById(mapCanvasId), {
-						zoom: ${zoom},
-						center: {lat: ${latitude}, lng: ${longitude} },
-						mapId: mapCanvasId,
-						mapTypeId: "${mapType}",
-						autocloseinfo: true
-					});
-
-			#*
-				markerList is {} or
-				{
-					"marker_series_0": {
-						"markerClustering": true,
-						"markerSpidering": true,
-						"markers": []
-					},
-					"marker_series_1": {}
-					...
-				}
-			*#
-			var markerSeries = ${markerList};
-			var markerSeriesConfigBySeriesName = jasperreports.map.placeSeriesMarkers(map, markerSeries, false, globalUseMarkerSpidering);
-
-			// enable marker spidering only for the configured series
-			var overlappingMarkerSpiderfier = jasperreports.map.enableSpidering(map, markerSeriesConfigBySeriesName);
-
-			// enable marker clustering globally and/or per series
-			var markerClustersBySeriesName = jasperreports.map.enableClustering(map, markerSeriesConfigBySeriesName, globalUseMarkerClustering);
-
-			// draw marker legend
-			var legendProperties = ${legendProperties};
-			jasperreports.map.drawLegend(legendProperties, map, mapCanvasId, markerSeriesConfigBySeriesName,
-					markerClustersBySeriesName, overlappingMarkerSpiderfier, defaultMarkerIcon, false);
-
-			// draw resetMap control
-			var resetMapProperties = ${resetMapProperties};
-			jasperreports.map.drawResetMap(resetMapProperties, map, ${latitude}, ${longitude}, ${zoom});
-
-			// draw paths
-			var paths = ${pathsList};
-			jasperreports.map.drawPaths(paths, map, false);
+			jasperreports.map.draw({
+				mapCanvasId: "${mapCanvasId}",
+				mapInstanceData: __jr_map_config__.instanceData,
+				isForExport: false
+			});
 		});
 	</script>
 #end
