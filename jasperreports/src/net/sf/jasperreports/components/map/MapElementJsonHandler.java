@@ -25,6 +25,8 @@ package net.sf.jasperreports.components.map;
 
 import net.sf.jasperreports.engine.JRGenericPrintElement;
 import net.sf.jasperreports.engine.export.GenericElementJsonHandler;
+import net.sf.jasperreports.engine.export.HtmlResourceHandler;
+import net.sf.jasperreports.engine.export.JsonExporter;
 import net.sf.jasperreports.engine.export.JsonExporterContext;
 import net.sf.jasperreports.web.util.VelocityUtil;
 
@@ -38,7 +40,7 @@ public class MapElementJsonHandler implements GenericElementJsonHandler
 {
 	private static final MapElementJsonHandler INSTANCE = new MapElementJsonHandler();
 
-	private static final String MAP_ELEMENT_JSON_TEMPLATE = "net/sf/jasperreports/components/map/resources/templates/MapElementJsonTemplate.vm";
+	public static final String MAP_ELEMENT_JSON_TEMPLATE = "net/sf/jasperreports/components/map/resources/templates/MapElementJsonTemplate.vm";
 
 	public static MapElementJsonHandler getInstance()
 	{
@@ -52,6 +54,14 @@ public class MapElementJsonHandler implements GenericElementJsonHandler
         contextMap.put("mapCanvasId", "map_canvas_" + element.hashCode());
 
         MapUtils.prepareContextForVelocityTemplate(contextMap, context.getJasperReportsContext(), element);
+
+		JsonExporter exporter = ((JsonExporter)context.getExporterRef());
+		HtmlResourceHandler internalResourceHandler = exporter.getExporterOutput() != null ?
+				exporter.getExporterOutput().getInternalResourceHandler() : null;
+		if (internalResourceHandler != null) {
+			contextMap.put("jasperreportsMapApiScriptLocation", internalResourceHandler.getResourcePath(MapUtils.MAP_API_SCRIPT));
+			contextMap.put("overlappingMarkerSpiderfierApiScriptLocation", internalResourceHandler.getResourcePath(MapUtils.OVERLAPPING_MARKER_SPIDERFIER_SCRIPT));
+		}
 
 		return VelocityUtil.processTemplate(MAP_ELEMENT_JSON_TEMPLATE, contextMap);
 	}
