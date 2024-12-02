@@ -50,7 +50,7 @@
 					<c:legendItem>
 						<c:itemProperty name="enabled" value="true"/>
 						<c:itemProperty name="label" value="--Legend--"/>
-						<c:itemProperty name="position" value="RIGHT_CENTER"/>
+						<c:itemProperty name="position" value="LEFT_BOTTOM"/>
 						<c:itemProperty name="orientation" value="vertical"/>
 						<c:itemProperty name="legendMaxWidth" value="100px"/>
 						<c:itemProperty name="legendMaxWidth.fullscreen" value="180px"/>
