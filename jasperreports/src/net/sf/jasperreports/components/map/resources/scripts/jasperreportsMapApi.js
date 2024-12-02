@@ -3,83 +3,15 @@ define("jasperreportsMapApi", function() {
         const { InfoWindow } = await google.maps.importLibrary("maps");
         const { AdvancedMarkerElement, PinElement } = await google.maps.importLibrary("marker");
 
-        const jasperreports = {};
+        const publicApi = {};
         let infowindow;
         const replacements = {
             latitude: "lat",
             longitude: "lng",
             icon: "glyph"
         };
-        jasperreports.map = {
-            draw: function({ mapCanvasId, mapInstanceData, isForExport }) {
-                const {
-                    zoom,
-                    latitude,
-                    longitude,
-                    mapType,
-                    markerList,
-                    useMarkerSpidering,
-                    useMarkerClustering,
-                    legendProperties,
-                    defaultMarkerIcon,
-                    resetMapProperties,
-                    pathsList
-                } = mapInstanceData;
-                const googleMapsOptions = {
-                    zoom: zoom,
-                    center: { lat: latitude, lng: longitude },
-                    mapId: "DEMO_MAP_ID",
-                    mapTypeId: mapType,
-                    autocloseinfo: true
-                };
 
-                if (isForExport) {
-                    Object.assign(googleMapsOptions, {
-                        disableDefaultUI: true,
-                        gestureHandling: 'none'
-                    })
-                }
-
-                const map = new google.maps.Map(document.getElementById(mapCanvasId), googleMapsOptions);
-
-                /*
-                    markerList is {} or
-                    {
-                        "marker_series_0": {
-                        "markerClustering": true,
-                            "markerSpidering": true,
-                            "markers": []
-                    },
-                        "marker_series_1": {}
-                    ...
-                    }
-                */
-                const markerSeriesConfigBySeriesName = jasperreports.map.placeSeriesMarkers(
-                    map, markerList, false, useMarkerSpidering);
-
-                // enable marker spidering only for the configured series
-                let overlappingMarkerSpiderfier = null;
-                if (!isForExport) {
-                    overlappingMarkerSpiderfier = jasperreports.map.enableSpidering(map, markerSeriesConfigBySeriesName);
-                }
-
-                // enable marker clustering globally and/or per series
-                const markerClustersBySeriesName = jasperreports.map.enableClustering(map, markerSeriesConfigBySeriesName, useMarkerClustering);
-
-                // draw marker legend
-                jasperreports.map.drawLegend(legendProperties, map, mapCanvasId, markerSeriesConfigBySeriesName,
-                    markerClustersBySeriesName, overlappingMarkerSpiderfier, defaultMarkerIcon, isForExport);
-
-                // draw resetMap control
-                if (!isForExport) {
-                    jasperreports.map.drawResetMap(resetMapProperties, map, latitude, longitude, zoom);
-                }
-
-                // draw paths
-                jasperreports.map.drawPaths(pathsList, map, isForExport);
-
-                return Promise.resolve(map);
-            },
+        const internalApi = {
             configureImage: function (parentKey, parentProps, parentOptions) {
                 var width, height, originX, originY, anchorX, anchorY, pp = parentProps, pk = parentKey;
 
@@ -143,8 +75,8 @@ define("jasperreportsMapApi", function() {
                 var pp = parentProps;
                 if (pp['infowindow.content'] && pp['infowindow.content'].length > 0) {
                     var po = {
-                            content: pp['infowindow.content']
-                        };
+                        content: pp['infowindow.content']
+                    };
                     if (pp['infowindow.pixelOffset']) {
                         po['pixelOffset'] = pp['infowindow.pixelOffset'];
                     }
@@ -539,8 +471,80 @@ define("jasperreportsMapApi", function() {
                 }
                 return oldKey;
             }
-        }
+        };
 
-        return Promise.resolve(jasperreports);
+        publicApi.map = {
+            draw: function ({mapCanvasId, mapInstanceData, isForExport}) {
+                const {
+                    zoom,
+                    latitude,
+                    longitude,
+                    mapType,
+                    markerList,
+                    useMarkerSpidering,
+                    useMarkerClustering,
+                    legendProperties,
+                    defaultMarkerIcon,
+                    resetMapProperties,
+                    pathsList
+                } = mapInstanceData;
+                const googleMapsOptions = {
+                    zoom: zoom,
+                    center: {lat: latitude, lng: longitude},
+                    mapId: "DEMO_MAP_ID",
+                    mapTypeId: mapType,
+                    autocloseinfo: true
+                };
+
+                if (isForExport) {
+                    Object.assign(googleMapsOptions, {
+                        disableDefaultUI: true,
+                        gestureHandling: 'none'
+                    })
+                }
+
+                const map = new google.maps.Map(document.getElementById(mapCanvasId), googleMapsOptions);
+
+                /*
+                    markerList is {} or
+                    {
+                        "marker_series_0": {
+                        "markerClustering": true,
+                            "markerSpidering": true,
+                            "markers": []
+                    },
+                        "marker_series_1": {}
+                    ...
+                    }
+                */
+                const markerSeriesConfigBySeriesName = internalApi.placeSeriesMarkers(
+                    map, markerList, false, useMarkerSpidering);
+
+                // enable marker spidering only for the configured series
+                let overlappingMarkerSpiderfier = null;
+                if (!isForExport) {
+                    overlappingMarkerSpiderfier = internalApi.enableSpidering(map, markerSeriesConfigBySeriesName);
+                }
+
+                // enable marker clustering globally and/or per series
+                const markerClustersBySeriesName = internalApi.enableClustering(map, markerSeriesConfigBySeriesName, useMarkerClustering);
+
+                // draw marker legend
+                internalApi.drawLegend(legendProperties, map, mapCanvasId, markerSeriesConfigBySeriesName,
+                    markerClustersBySeriesName, overlappingMarkerSpiderfier, defaultMarkerIcon, isForExport);
+
+                // draw resetMap control
+                if (!isForExport) {
+                    internalApi.drawResetMap(resetMapProperties, map, latitude, longitude, zoom);
+                }
+
+                // draw paths
+                internalApi.drawPaths(pathsList, map, isForExport);
+
+                return Promise.resolve(map);
+            }
+        };
+
+        return Promise.resolve(publicApi);
     };
 });
