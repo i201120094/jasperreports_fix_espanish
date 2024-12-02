@@ -26,7 +26,9 @@ package net.sf.jasperreports.components.map;
 import net.sf.jasperreports.engine.JRGenericPrintElement;
 import net.sf.jasperreports.engine.JasperReportsContext;
 import net.sf.jasperreports.util.JacksonUtil;
+import net.sf.jasperreports.web.util.VelocityUtil;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -37,6 +39,18 @@ public class MapUtils {
     public static final String MAP_API_SCRIPT = "net/sf/jasperreports/components/map/resources/scripts/jasperreportsMapApi.js";
     public static final String EXTERNAL_SCRIPT_LOAD_API_SCRIPT = "net/sf/jasperreports/components/map/resources/scripts/externalScriptLoadApi.js";
     public static final String OVERLAPPING_MARKER_SPIDERFIER_SCRIPT = "net/sf/jasperreports/components/map/resources/scripts/oms_1.0.3.js";
+
+    public static String getSimplifiedMapConfig(JasperReportsContext jasperReportsContext, JRGenericPrintElement element)
+    {
+        Map<String, Object> contextMap = new HashMap<>();
+        contextMap.put("mapCanvasId", "map_canvas_" + element.hashCode());
+        MapUtils.prepareContextForVelocityTemplate(contextMap, jasperReportsContext, element);
+
+        contextMap.put("jasperreportsMapApiScriptLocation", "");
+        contextMap.put("overlappingMarkerSpiderfierApiScriptLocation", "");
+
+        return VelocityUtil.processTemplate(MapElementJsonHandler.MAP_ELEMENT_JSON_TEMPLATE, contextMap);
+    }
 
     public static void prepareContextForVelocityTemplate(
             Map<String, Object> velocityContext,

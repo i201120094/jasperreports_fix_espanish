@@ -24,7 +24,6 @@
 package net.sf.jasperreports.components.map;
 
 import net.sf.jasperreports.engine.JRGenericPrintElement;
-import net.sf.jasperreports.engine.JasperReportsContext;
 import net.sf.jasperreports.engine.ReportContext;
 import net.sf.jasperreports.engine.export.GenericElementHtmlHandler;
 import net.sf.jasperreports.engine.export.JRHtmlExporterContext;
@@ -74,7 +73,7 @@ public class MapElementHtmlHandler implements GenericElementHtmlHandler
             contextMap.put("jasperreportsMapApiScript", VelocityUtil.processTemplate(MapUtils.MAP_API_SCRIPT, (VelocityContext) null));
             contextMap.put("externalScriptLoadApi", VelocityUtil.processTemplate(MapUtils.EXTERNAL_SCRIPT_LOAD_API_SCRIPT, (VelocityContext) null));
             contextMap.put("overlappingMarkerSpiderfierScript", VelocityUtil.processTemplate(MapUtils.OVERLAPPING_MARKER_SPIDERFIER_SCRIPT, (VelocityContext) null));
-            contextMap.put("mapConfig", getMapConfig(context.getJasperReportsContext(), element));
+            contextMap.put("mapConfig", MapUtils.getSimplifiedMapConfig(context.getJasperReportsContext(), element));
 
             if (context.getValue(FIRST_ATTEMPT_PARAM) == null)
             {
@@ -86,19 +85,7 @@ public class MapElementHtmlHandler implements GenericElementHtmlHandler
 		return VelocityUtil.processTemplate(MAP_ELEMENT_HTML_TEMPLATE, contextMap);
 	}
 
-    private String getMapConfig(JasperReportsContext jasperReportsContext, JRGenericPrintElement element)
-    {
-        Map<String, Object> contextMap = new HashMap<>();
-        contextMap.put("mapCanvasId", "map_canvas_" + element.hashCode());
-        MapUtils.prepareContextForVelocityTemplate(contextMap, jasperReportsContext, element);
-
-        contextMap.put("jasperreportsMapApiScriptLocation", "");
-        contextMap.put("overlappingMarkerSpiderfierApiScriptLocation", "");
-
-        return VelocityUtil.processTemplate(MapElementJsonHandler.MAP_ELEMENT_JSON_TEMPLATE, contextMap);
-    }
-
-	@Override
+    @Override
 	public boolean toExport(JRGenericPrintElement element)
     {
 		return true;
