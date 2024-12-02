@@ -366,12 +366,8 @@ define("jasperreportsMapApi", function() {
                         if (legendUseMarkerIcons) {
                             var legendMarkerIcon = markerSeriesConfigBySeriesName[seriesName].legendIcon;
                             if (!legendMarkerIcon) {
-                                legendMarkerIcon = markerSeriesConfigBySeriesName[seriesName].googleMarkers[0].content;
-                            }
-                            if (!legendMarkerIcon) {
                                 legendMarkerIcon = defaultMarkerIcon;
                             }
-
                             if (legendMarkerIcon) {
                                 var markerImage = document.createElement("img");
                                 markerImage.src = legendMarkerIcon;
