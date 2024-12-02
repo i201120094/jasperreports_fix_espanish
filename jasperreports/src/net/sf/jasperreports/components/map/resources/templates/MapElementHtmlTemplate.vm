@@ -14,11 +14,6 @@
 	<script>
 		${externalScriptLoadApi}
 
-		let __jr_map_config__ = {
-			${mapConfig}
-		};
-		__jr_map_config__ = __jr_map_config__["${mapCanvasId}"];
-
 		const __jr__modules__ = new Map();
 		let __jr__define__;
 
@@ -52,20 +47,26 @@
 		};
 
 		__jr__define__("googleMapsApi", function() {
-			return __jr__jsonp__load__script__(__jr_map_config__.instanceData.googleMapsApiUrl);
+			return __jr__jsonp__load__script__("${googleMapsApiUrl}");
 		});
 
 		__jr__define__("markerClustererApi", function() {
-			return __jr__load__script__(__jr_map_config__.instanceData.markerClustererApiUrl);
+			return __jr__load__script__("${markerClustererApiUrl}");
 		});
 	</script>
 	#end
 	<script type="text/javascript">
 		__jr__require__(["jasperreportsMapApi", "googleMapsApi", "markerClustererApi", "overlappingMarkerSpiderfierApi"], async (promiseReturnArr) => {
 			const jasperreports = await promiseReturnArr[0]();
+
+			let jrMapConfig = {
+				${mapConfig}
+			};
+			jrMapConfig = jrMapConfig["${mapCanvasId}"];
+
 			jasperreports.map.draw({
 				mapCanvasId: "${mapCanvasId}",
-				mapInstanceData: __jr_map_config__.instanceData,
+				mapInstanceData: jrMapConfig.instanceData,
 				isForExport: false
 			});
 		});

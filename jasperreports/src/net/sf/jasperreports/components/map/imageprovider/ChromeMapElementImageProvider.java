@@ -155,6 +155,9 @@ public class ChromeMapElementImageProvider extends AbstractMapElementImageProvid
 
         velocityContext.put("externalScriptLoadApi", VelocityUtil.processTemplate(MapUtils.EXTERNAL_SCRIPT_LOAD_API_SCRIPT, (VelocityContext) null));
         velocityContext.put("jasperreportsMapApiScript", VelocityUtil.processTemplate(MapUtils.MAP_API_SCRIPT, (VelocityContext) null));
+
+        MapUtils.addExternalURLs(velocityContext, element);
+
         velocityContext.put("mapConfig", MapUtils.getSimplifiedMapConfig(jasperReportsContext, element));
         velocityContext.put("mapCanvasId", "map_canvas_" + element.hashCode());
 

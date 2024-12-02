@@ -46,6 +46,8 @@ public class MapUtils {
         contextMap.put("mapCanvasId", "map_canvas_" + element.hashCode());
         MapUtils.prepareContextForVelocityTemplate(contextMap, jasperReportsContext, element);
 
+        contextMap.put("googleMapsApiUrl", "");
+        contextMap.put("markerClustererApiUrl", "");
         contextMap.put("jasperreportsMapApiScriptLocation", "");
         contextMap.put("overlappingMarkerSpiderfierApiScriptLocation", "");
 
@@ -100,6 +102,11 @@ public class MapUtils {
         String paths = pathList == null || pathList.isEmpty() ? "[]" : jacksonUtil.getIndentedJsonString(pathList);
         velocityContext.put("pathsList", paths);
 
+        String defaultMarkerIcon = (String)element.getParameterValue(MapComponent.PARAMETER_DEFAULT_MARKER_ICON);
+        velocityContext.put(MapComponent.PARAMETER_DEFAULT_MARKER_ICON, defaultMarkerIcon != null ? defaultMarkerIcon: "");
+    }
+
+    public static void addExternalURLs(Map<String, Object> velocityContext, JRGenericPrintElement element) {
         String reqParams = (String)element.getParameterValue(MapComponent.PARAMETER_REQ_PARAMS);
         String googleMapsApiUrl = "https://maps.googleapis.com/maps/api/js"; //FIXME: make this URL configurable via props
         if (reqParams != null) {
@@ -108,8 +115,5 @@ public class MapUtils {
         velocityContext.put("googleMapsApiUrl", googleMapsApiUrl);
         velocityContext.put("markerClustererApiUrl",
                 "https://unpkg.com/@googlemaps/markerclusterer/dist/index.min.js"); //FIXME: make this URL configurable via props
-
-        String defaultMarkerIcon = (String)element.getParameterValue(MapComponent.PARAMETER_DEFAULT_MARKER_ICON);
-        velocityContext.put(MapComponent.PARAMETER_DEFAULT_MARKER_ICON, defaultMarkerIcon != null ? defaultMarkerIcon: "");
     }
 }

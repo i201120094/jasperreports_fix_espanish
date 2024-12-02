@@ -54,6 +54,7 @@ public class MapElementJsonHandler implements GenericElementJsonHandler
         contextMap.put("mapCanvasId", "map_canvas_" + element.hashCode());
 
         MapUtils.prepareContextForVelocityTemplate(contextMap, context.getJasperReportsContext(), element);
+		MapUtils.addExternalURLs(contextMap, element);
 
 		JsonExporter exporter = ((JsonExporter)context.getExporterRef());
 		HtmlResourceHandler internalResourceHandler = exporter.getExporterOutput() != null ?
