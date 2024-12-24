@@ -29,7 +29,6 @@
 			<variableExpression><![CDATA["12345"]]></variableExpression>
 		</variable>
 	</subDataset>
-	<parameter name="TableDataSource" class="net.sf.jasperreports.engine.JRDataSource"/>
 	<title>
 		<band height="150">
 			<image scaleImage="Clip">
@@ -52,7 +51,7 @@
 				</reportElement>
 				<c:table xmlns:c="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
 					<datasetRun subDataset="TableData" uuid="6770b532-f93b-49b2-a105-2ae35d01ec87">
-						<dataSourceExpression><![CDATA[$P{TableDataSource}]]></dataSourceExpression>
+						<dataSourceExpression><![CDATA[new JREmptyDataSource(50)]]></dataSourceExpression>
 					</datasetRun>
 					<c:column width="100" uuid="ceaf6eb4-f1e9-4aa8-aca6-3e53b67c1615">
 						<c:columnHeader style="TableHeader" height="30" rowSpan="2">

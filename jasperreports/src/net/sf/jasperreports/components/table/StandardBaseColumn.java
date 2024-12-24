@@ -60,6 +60,7 @@ public abstract class StandardBaseColumn implements BaseColumn, Serializable, JR
 	public static final String PROPERTY_GROUP_HEADERS = "groupHeaders";
 	public static final String PROPERTY_GROUP_FOOTERS = "groupFooters";
 	public static final String PROPERTY_WIDTH = "width";
+	public static final String PROPERTY_WEIGHT = "weight";
 	
 	private UUID uuid;
 	private JRExpression printWhenExpression;
@@ -70,6 +71,7 @@ public abstract class StandardBaseColumn implements BaseColumn, Serializable, JR
 	private Cell columnHeader;
 	private Cell columnFooter;
 	private Integer width;
+	private Integer weight;
 
 	private JRPropertiesMap propertiesMap;
 	private List<JRPropertyExpression> propertyExpressions = new ArrayList<>();
@@ -95,6 +97,7 @@ public abstract class StandardBaseColumn implements BaseColumn, Serializable, JR
 		this.columnFooter = factory.createCell(column.getColumnFooter());
 
 		this.width = column.getWidth();
+		this.weight = column.getWeight();
 
 		propertiesMap = JRPropertiesMap.getPropertiesClone(column);
 		copyPropertyExpressions(column, factory);
@@ -239,6 +242,19 @@ public abstract class StandardBaseColumn implements BaseColumn, Serializable, JR
 		this.width = width;
 		getEventSupport().firePropertyChange(PROPERTY_WIDTH, 
 				old, this.width);
+	}
+
+	@Override
+	public Integer getWeight()
+	{
+		return weight;
+	}
+
+	public void setWeight(Integer weight)
+	{
+		Object old = this.weight;
+		this.weight = weight;
+		getEventSupport().firePropertyChange(PROPERTY_WEIGHT, old, this.weight);
 	}
 
 	private transient JRPropertyChangeSupport eventSupport;
