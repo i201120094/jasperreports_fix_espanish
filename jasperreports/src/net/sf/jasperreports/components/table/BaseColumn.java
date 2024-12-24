@@ -59,7 +59,6 @@ public interface BaseColumn extends JRCloneable, JRPropertiesHolder, JRIdentifia
 	
 	Integer getWidth();
 	
-	@JacksonXmlProperty(isAttribute = true)
 	Integer getWeight();
 
 	<R> R visitColumn(ColumnVisitor<R> visitor);

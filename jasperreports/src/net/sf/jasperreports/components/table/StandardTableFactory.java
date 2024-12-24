@@ -23,10 +23,11 @@
  */
 package net.sf.jasperreports.components.table;
 
+import org.xml.sax.Attributes;
+
+import net.sf.jasperreports.engine.type.HorizontalPosition;
 import net.sf.jasperreports.engine.xml.JRBaseFactory;
 import net.sf.jasperreports.engine.xml.JRXmlConstants;
-
-import org.xml.sax.Attributes;
 
 
 /**
@@ -45,6 +46,12 @@ public class StandardTableFactory extends JRBaseFactory
 		if (whenNoDataType != null)
 		{
 			table.setWhenNoDataType(whenNoDataType);
+		}
+
+		HorizontalPosition horizontalPosition = HorizontalPosition.getByName(atts.getValue(JRXmlConstants.ATTRIBUTE_horizontalPosition));
+		if (horizontalPosition != null)
+		{
+			table.setHorizontalPosition(horizontalPosition);
 		}
 
 		return table;
