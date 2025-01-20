@@ -11,61 +11,47 @@ define("jasperreportsMapApi", function() {
             icon: "glyph"
         };
 
+        const defaultGlyphColor = "#111111";
+
         const internalApi = {
-            configureImage: function (parentKey, parentProps, parentOptions) {
-                var width, height, originX, originY, anchorX, anchorY, pp = parentProps, pk = parentKey;
-
-                width = pp[pk + '.width'] ? parseInt(pp[pk + '.width']) : null;
-                height = pp[pk + '.height'] ? parseInt(pp[pk + '.height']) : null;
-
-                originX = pp[pk + '.origin.x'] ? parseInt(pp[pk + '.origin.x']) : 0;
-                originY = pp[pk + '.origin.y'] ? parseInt(pp[pk + '.origin.y']) : 0;
-
-                anchorX = pp[pk + '.anchor.x'] ? parseInt(pp[pk + '.anchor.x']) : 0;
-                anchorY = pp[pk + '.anchor.y'] ? parseInt(pp[pk + '.anchor.y']) : 0;
-
-                parentOptions[pk] = {
-                    url: pp[pk + '.url']
-                    //size: width && height ? new google.maps.Size(width, height) : null,
-                    // origin: new google.maps.Point(originX, originY),
-                    //anchor: new google.maps.Point(anchorX, anchorY)
-                };
-            },
             configurePinElementFromIcon: function (parentKey, parentProps, parentOptions) {
-                var width, height, originX, originY, anchorX, anchorY,
-                    pp = parentProps,
+                let width, height,
+                    //originX, originY, anchorX, anchorY,
                     pk = parentKey.indexOf(".url") < 0 ? parentKey : parentKey.substring(0, parentKey.indexOf(".url") + 1);
 
                 width = parentProps[pk + '.width'] ? parseInt(parentProps[pk + '.width']) : null;
                 height = parentProps[pk + '.height'] ? parseInt(parentProps[pk + '.height']) : null;
 
-                originX = parentProps[pk + '.origin.x'] ? parseInt(parentProps[pk + '.origin.x']) : 0;
-                originY = parentProps[pk + '.origin.y'] ? parseInt(parentProps[pk + '.origin.y']) : 0;
+                // originX = parentProps[pk + '.origin.x'] ? parseInt(parentProps[pk + '.origin.x']) : 0;
+                // originY = parentProps[pk + '.origin.y'] ? parseInt(parentProps[pk + '.origin.y']) : 0;
+                //
+                // anchorX = parentProps[pk + '.anchor.x'] ? parseInt(parentProps[pk + '.anchor.x']) : 0;
+                // anchorY = parentProps[pk + '.anchor.y'] ? parseInt(parentProps[pk + '.anchor.y']) : 0;
 
-                anchorX = parentProps[pk + '.anchor.x'] ? parseInt(parentProps[pk + '.anchor.x']) : 0;
-                anchorY = parentProps[pk + '.anchor.y'] ? parseInt(parentProps[pk + '.anchor.y']) : 0;
-
-                parentOptions.content = new PinElement({
-                    glyph: parentProps[parentKey]
-                    //size: width && height ? new google.maps.Size(width, height) : null,
-                    //origin: new google.maps.Point(originX, originY),
-                    //anchor: new google.maps.Point(anchorX, anchorY)
-                }).element;
+                parentOptions.content = document.createElement("img");
+                parentOptions.content.src = parentProps[parentKey];
+                if(width) {
+                    parentOptions.content.width = width;
+                }
+                if(height) {
+                    parentOptions.content.height = height;
+                }
             },
             configurePinElementFromColor: function (parentKey, parentProps, parentOptions) {
-                var pk = parentKey;
-
+                const pinElem = new PinElement({
+                    background: parentProps[parentKey],
+                    glyphColor: defaultGlyphColor,
+                    scale: this.getPinScale(parentProps["size"])
+                });
+                if (parentProps.label && parentProps.label.length > 0) {
+                    pinElem.glyph = parentProps.label;
+                }
+                parentOptions.content = pinElem.element;
+            },
+            configurePinElementFromLabel: function (parentKey, parentProps, parentOptions) {
                 parentOptions.content = new PinElement({
-                    glyphColor: parentProps[pk],
-                    scale: parentProps["size"]
-                        ? (parentProps["size"] === "tiny"
-                            ? 0.25
-                            : (parentProps["size"] === "small"
-                                ? 0.5
-                                : (parentProps["size"] === "mid"
-                                    ? 0.75
-                                    : 1.0)))
-                        : 1.0,
+                    glyph: parentProps[parentKey],
+                    scale: this.getPinScale(parentProps["size"])
                 }).element;
             },
             configureDefaultPinElement: function (parentOptions) {
@@ -112,16 +98,28 @@ define("jasperreportsMapApi", function() {
                             this.configurePinElementFromIcon('icon', markerProps, markerOptions);
                         } else if (markerProps['color'] && markerProps['color'].length > 0) {
                             this.configurePinElementFromColor('color', markerProps, markerOptions);
+                        } else if (markerProps['label'] && markerProps['label'].length > 0) {
+                            this.configurePinElementFromLabel('label', markerProps, markerOptions);
                         } else {
                             this.configureDefaultPinElement(markerProps, markerOptions);
                         }
                         if (markerProps['shadow.url'] && markerProps['shadow.url'].length > 0) this.configurePinElementFromIcon('shadow.url', markerProps, markerOptions);
                         else if (markerProps['shadow'] && markerProps['shadow'].length > 0) markerOptions['shadow'] = markerProps['shadow'];
+                        let reservedProps = {};
                         for (j in markerProps) {
-                            if (j !== "latitude" && j !== "longitude" && j !== "size" && j !== "label" && j !== "color" && j !== "url" && j !== "target" && j.indexOf(".") < 0 && markerProps.hasOwnProperty(j) && !markerOptions.hasOwnProperty(j)) markerOptions[j] = markerProps[j];
+                            if (markerProps.hasOwnProperty(j) && !markerOptions.hasOwnProperty(j)) {
+                                if(j !== "latitude" && j !== "longitude" && j !== "size" && j !== "label" && j !== "color" && j !== "url" && j !== "target" && j.indexOf(".") < 0) {
+                                    markerOptions[j] = markerProps[j];
+                                }
+                                else if(j === "label" || j === "url" || j === "target") {
+                                    reservedProps[j] = markerProps[j];
+                                }
+                            }
                         }
                         var marker = new AdvancedMarkerElement(markerOptions);
-
+                        for (k in reservedProps) {
+                            marker[k] = reservedProps[k];
+                        }
                         // when in export mode, do not add unnecessary listener
                         if (!isForExport) {
                             marker['info'] = this.createInfo(markerProps);
@@ -466,6 +464,11 @@ define("jasperreportsMapApi", function() {
                     return replacements[oldKey];
                 }
                 return oldKey;
+            },
+            getPinScale: function(size) {
+                return (size && size.length > 0
+                    ? (size  === "tiny" ? 0.25 : (size === "small" ? 0.5 : (size === "mid" ? 0.75 : 1)))
+                    : 1.0);
             }
         };
 
