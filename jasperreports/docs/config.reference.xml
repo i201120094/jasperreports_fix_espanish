@@ -6334,6 +6334,25 @@ Properties set at element level take priority over properties set globally or pe
   </configProperty>
   
   
+  <!-- net.sf.jasperreports.export.xls.single.sheet.name -->
+  
+  <configProperty name="net.sf.jasperreports.export.xls.single.sheet.name">
+    <description>
+Property specifying the value for the #get the sheet name for the single sheet created when the 
+<api href="net/sf/jasperreports/export/XlsReportConfiguration.html#isOnePagePerSheet()">isOnePagePerSheet()</api> flag is set to false.
+<br/>
+Without this configuration being set, the single sheet name would default to the report name value and this setting is meant 
+to allow override this default behavior.
+<br/>
+Note that even with the isOnePagePerSheet() flag set to false, the workbook could still have more than one sheet
+because of sheet break properties attached to elements, in which case the subsequent sheet names would have incremented numbers 
+appended to the specified sheet name.
+<br/>
+Also, the <api href="net/sf/jasperreports/export/XlsReportConfiguration.html#getSheetNames()">getSheetNames()</api> setting overrides this single sheet name setting.
+	</description>
+  </configProperty>
+  
+  
   <!-- net.sf.jasperreports.export.xls.sheet.name -->
   
   <configProperty name="net.sf.jasperreports.export.xls.sheet.name">
