@@ -59,6 +59,7 @@ public class AbstractXlsReportConfiguration extends SimpleReportExportConfigurat
 	private String sheetFooterCenter;
 	private String sheetFooterRight;
 	private String password;
+	private String singleSheetName;
 	private String[] sheetNames;
 	private Map<String,String> formatPatternsMap;
 	private Boolean isIgnoreHyperlink;
@@ -464,6 +465,22 @@ public class AbstractXlsReportConfiguration extends SimpleReportExportConfigurat
 	public void setPassword(String password)
 	{
 		this.password = password;
+	}
+
+	
+	@Override
+	public String getSingleSheetName()
+	{
+		return singleSheetName;
+	}
+
+	
+	/**
+	 * 
+	 */
+	public void setSingleSheetName(String singleSheetName)
+	{
+		this.singleSheetName = singleSheetName;
 	}
 
 	
