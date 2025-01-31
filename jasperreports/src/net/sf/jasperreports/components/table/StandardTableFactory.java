@@ -54,6 +54,12 @@ public class StandardTableFactory extends JRBaseFactory
 			table.setHorizontalPosition(horizontalPosition);
 		}
 
+		String shrinkWidthAttr = atts.getValue("shrinkWidth");
+		if (shrinkWidthAttr != null)
+		{
+			table.setShrinkWidth(Boolean.valueOf(shrinkWidthAttr));
+		}
+
 		return table;
 	}
 	

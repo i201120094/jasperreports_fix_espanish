@@ -770,6 +770,7 @@
 							</restriction>
 						</simpleType>
 					</attribute>
+					<attribute name="shrinkWidth" type="boolean" use="optional"/>
 				</extension>
 			</complexContent>
 		</complexType>

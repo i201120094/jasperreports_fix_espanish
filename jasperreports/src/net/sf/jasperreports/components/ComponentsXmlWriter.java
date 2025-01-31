@@ -488,6 +488,7 @@ public class ComponentsXmlWriter extends AbstractComponentXmlWriter
 		if (isNewerVersionOrEqual(componentElement, reportWriter, JRConstants.VERSION_6_21_0))
 		{
 			writer.addAttribute(JRXmlConstants.ATTRIBUTE_horizontalPosition, table.getHorizontalPosition());
+			writer.addAttribute("shrinkWidth", table.shrinkWidth());
 		}
 		reportWriter.writeDatasetRun(table.getDatasetRun());
 		
