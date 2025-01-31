@@ -381,6 +381,25 @@ public interface XlsReportConfiguration extends ReportExportConfiguration
 	public static final String PROPERTY_PASSWORD = JRPropertiesUtil.PROPERTY_PREFIX + "export.xls.password";
 
 	/**
+	 * Property specifying the value for the #get the sheet name for the single sheet created when the {@link #isOnePagePerSheet()} flag is set to false.
+	 * Without this configuration being set, the single sheet name would default to the report name value and this setting is meant 
+	 * to allow override this default behavior.
+	 * Note that even with the {@link #isOnePagePerSheet()} flag set to false, the workbook could still have more than one sheet
+	 * because of sheet break properties attached to elements, in which case the subsequent sheet names would have incremented numbers 
+	 * appended to the specified sheet name.
+	 * Also, the {@link #getSheetNames()} setting overrides this single sheet name setting.
+	 * 
+	 * @see JRPropertiesUtil
+	 */
+	@Property(
+			name = "net.sf.jasperreports.export.xls.single.sheet.name",
+			category = PropertyConstants.CATEGORY_EXPORT,
+			scopes = {PropertyScope.REPORT},
+			sinceVersion = PropertyConstants.VERSION_7_0_2
+			)
+	public static final String PROPERTY_SINGLE_SHEET_NAME = JRPropertiesUtil.PROPERTY_PREFIX + "export.xls.single.sheet.name";
+
+	/**
 	 * Prefix used to identify properties holding sheet names. Such properties are useful when 
 	 * defining sheet names in the JRXML template is required. The property values are collected in an 
 	 * ordered list, therefore the order in which the properties appear in the report is important. 
@@ -1340,6 +1359,14 @@ public interface XlsReportConfiguration extends ReportExportConfiguration
 		)
 	@ExporterProperty(PROPERTY_PASSWORD)
 	public String getPassword();
+
+	/**
+	 * Returns the value representing the custom sheet name to use instead of the report name,
+	 * which would be the default, in case the {@link #isOnePagePerSheet()} is set to false.
+	 * @see #PROPERTY_SINGLE_SHEET_NAME
+	 */
+	@ExporterProperty(PROPERTY_SINGLE_SHEET_NAME)
+	public String getSingleSheetName();
 
 	/**
 	 * Returns an array of strings representing custom sheet names. 
