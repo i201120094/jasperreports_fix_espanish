@@ -38,8 +38,9 @@ define("jasperreportsMapApi", function() {
                 }
             },
             configurePinElementFromColor: function (parentKey, parentProps, parentOptions) {
+                const pinBg = "#"+ parentProps[parentKey];
                 const pinElem = new PinElement({
-                    background: parentProps[parentKey],
+                    background: pinBg,
                     scale: this.getPinScale(parentProps["size"]),
                 });
                 if (parentProps.label && parentProps.label.length > 0) {
