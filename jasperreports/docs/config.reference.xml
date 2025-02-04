@@ -2825,6 +2825,18 @@ If not specified, the experimental version is loaded by default.
   </configProperty>
   
   
+  <!-- net.sf.jasperreports.components.map.google.map.id -->
+
+  <configProperty name="net.sf.jasperreports.components.map.google.map.id">
+    <description>
+Property that indicates the <a href="https://developers.google.com/maps/documentation/javascript/map-ids/mapid-over">map ID</a> for the map,
+used to identify the associated Google Map styling and configuration settings stored in Google Cloud.
+<br/>
+If not specified, the default Map.DEMO_MAP_ID value will be taken into account.
+    </description>
+  </configProperty>
+
+
   <!-- net.sf.jasperreports.components.map.client.id -->
   
   <configProperty name="net.sf.jasperreports.components.map.client.id">
@@ -2833,7 +2845,6 @@ Property that specifies the client ID for Google Maps API for Business. If set, 
 <br/>
 Usually works along with the <a href="#net.sf.jasperreports.components.map.signature">signature</a> property for signed URLs.
     </description>
-    <api>net/sf/jasperreports/components/map/MapComponent.html#PROPERTY_CLIENT_ID</api>
   </configProperty>
   
   

@@ -7,6 +7,7 @@
         "longitude": ${longitude},
         "zoom": ${zoom},
         "mapType": "${mapType}",
+        "mapId": "${mapId}",
         "useMarkerClustering": ${useMarkerClustering},
         "useMarkerSpidering": ${useMarkerSpidering},
         "defaultMarkerIcon": "${defaultMarkerIcon}",

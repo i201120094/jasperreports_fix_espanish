@@ -73,6 +73,9 @@ public class MapUtils {
         String mapType = (String) element.getParameterValue(MapComponent.ATTRIBUTE_MAP_TYPE);
         mapType = (mapType == null ? MapComponent.DEFAULT_MAP_TYPE.getName() : mapType).toLowerCase();
 
+        String mapId = (String) element.getParameterValue(MapComponent.PARAMETER_MAP_ID);
+        mapId = (mapId == null ? MapComponent.DEMO_MAP_ID : mapId);
+
         Boolean markerClustering = (Boolean) element.getParameterValue(MapComponent.ATTRIBUTE_MARKER_CLUSTERING);
         markerClustering = markerClustering != null ? markerClustering.booleanValue() : false;
 
@@ -83,6 +86,7 @@ public class MapUtils {
         velocityContext.put("longitude", longitude);
         velocityContext.put("zoom", zoom);
         velocityContext.put("mapType", mapType);
+        velocityContext.put("mapId", mapId);
         velocityContext.put("useMarkerClustering", markerClustering);
         velocityContext.put("useMarkerSpidering", markerSpidering);
 

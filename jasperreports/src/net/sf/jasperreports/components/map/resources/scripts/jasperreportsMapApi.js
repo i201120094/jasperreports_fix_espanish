@@ -1,6 +1,6 @@
 define("jasperreportsMapApi", function() {
     return async function initMap() {
-        const { InfoWindow } = await google.maps.importLibrary("maps");
+        const { Map, InfoWindow } = await google.maps.importLibrary("maps");
         const { AdvancedMarkerElement, PinElement } = await google.maps.importLibrary("marker");
 
         const publicApi = {};
@@ -11,7 +11,7 @@ define("jasperreportsMapApi", function() {
             icon: "glyph"
         };
 
-        const defaultGlyphColor = "#111111";
+        const defaultGlyphColor = "#000000";
 
         const internalApi = {
             configurePinElementFromIcon: function (parentKey, parentProps, parentOptions) {
@@ -40,10 +40,10 @@ define("jasperreportsMapApi", function() {
             configurePinElementFromColor: function (parentKey, parentProps, parentOptions) {
                 const pinElem = new PinElement({
                     background: parentProps[parentKey],
-                    glyphColor: defaultGlyphColor,
-                    scale: this.getPinScale(parentProps["size"])
+                    scale: this.getPinScale(parentProps["size"]),
                 });
                 if (parentProps.label && parentProps.label.length > 0) {
+                    pinElem.glyphColor = defaultGlyphColor;
                     pinElem.glyph = parentProps.label;
                 }
                 parentOptions.content = pinElem.element;
@@ -51,7 +51,8 @@ define("jasperreportsMapApi", function() {
             configurePinElementFromLabel: function (parentKey, parentProps, parentOptions) {
                 parentOptions.content = new PinElement({
                     glyph: parentProps[parentKey],
-                    scale: this.getPinScale(parentProps["size"])
+                    glyphColor: defaultGlyphColor,
+                    scale: this.getPinScale(parentProps["size"]),
                 }).element;
             },
             configureDefaultPinElement: function (parentOptions) {
@@ -108,15 +109,15 @@ define("jasperreportsMapApi", function() {
                         let reservedProps = {};
                         for (j in markerProps) {
                             if (markerProps.hasOwnProperty(j) && !markerOptions.hasOwnProperty(j)) {
-                                if(j !== "latitude" && j !== "longitude" && j !== "size" && j !== "label" && j !== "color" && j !== "url" && j !== "target" && j.indexOf(".") < 0) {
-                                    markerOptions[j] = markerProps[j];
-                                }
-                                else if(j === "label" || j === "url" || j === "target") {
+                                if(j === "color" || j === "label" || j === "url" || j === "target") {
                                     reservedProps[j] = markerProps[j];
                                 }
-                            }
+                                else if(j !== "latitude" && j !== "longitude" && j !== "size" && j.indexOf(".") < 0) {
+                                    markerOptions[j] = markerProps[j];
+                                }
+                           }
                         }
-                        var marker = new AdvancedMarkerElement(markerOptions);
+                        const marker = new AdvancedMarkerElement(markerOptions);
                         for (k in reservedProps) {
                             marker[k] = reservedProps[k];
                         }
@@ -479,6 +480,7 @@ define("jasperreportsMapApi", function() {
                     latitude,
                     longitude,
                     mapType,
+                    mapId,
                     markerList,
                     useMarkerSpidering,
                     useMarkerClustering,
@@ -490,7 +492,7 @@ define("jasperreportsMapApi", function() {
                 const googleMapsOptions = {
                     zoom: zoom,
                     center: {lat: latitude, lng: longitude},
-                    mapId: "DEMO_MAP_ID",
+                    mapId: mapId,
                     mapTypeId: mapType,
                     autocloseinfo: true
                 };
@@ -502,7 +504,7 @@ define("jasperreportsMapApi", function() {
                     })
                 }
 
-                const map = new google.maps.Map(document.getElementById(mapCanvasId), googleMapsOptions);
+                const map = new Map(document.getElementById(mapCanvasId), googleMapsOptions);
 
                 /*
                     markerList is {} or

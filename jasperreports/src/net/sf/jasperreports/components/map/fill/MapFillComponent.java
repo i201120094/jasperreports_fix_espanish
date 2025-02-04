@@ -104,6 +104,7 @@ public class MapFillComponent extends BaseFillComponent implements FillContextPr
 	private String key;
 	private String googleVersion;
 	private String version;
+	private String mapId;
 	private String reqParams;
 	private String defaultMarkerIcon;
 
@@ -181,13 +182,15 @@ public class MapFillComponent extends BaseFillComponent implements FillContextPr
 	
 	protected void evaluateMap(byte evaluation) throws JRException
 	{
-		JRPropertiesHolder propertiesHolder = fillContext.getComponentElement().getParentProperties();
+		JRComponentElement componentElement = fillContext.getComponentElement();
+		JRPropertiesHolder propertiesHolder = componentElement.getParentProperties();
 		JRPropertiesUtil util = JRPropertiesUtil.getInstance(fillContext.getFiller().getJasperReportsContext());
 		clientId = util.getProperty(propertiesHolder, MapComponent.PROPERTY_CLIENT_ID);
 		signature = util.getProperty(propertiesHolder, MapComponent.PROPERTY_SIGNATURE);
 		key = util.getProperty(propertiesHolder, MapComponent.PROPERTY_KEY);
 		defaultMarkerIcon = util.getProperty(propertiesHolder, MapComponent.PROPERTY_DEFAULT_MARKER_ICON);
 		googleVersion = util.getProperty(propertiesHolder, MapComponent.PROPERTY_GOOGLE_VERSION);
+		mapId = util.getProperty(componentElement, MapComponent.PROPERTY_GOOGLE_MAP_ID);
 		@SuppressWarnings("deprecation")
 		String depVersion = util.getProperty(propertiesHolder, MapComponent.PROPERTY_VERSION);
 		version = depVersion;
@@ -478,6 +481,9 @@ public class MapFillComponent extends BaseFillComponent implements FillContextPr
 				// avoiding name collision of the version property
 				printElement.setParameterValue(MapComponent.PARAMETER_V, version);
 			}
+		}
+		if (mapId != null && mapId.trim().length() > 0) {
+			printElement.setParameterValue(MapComponent.PARAMETER_MAP_ID, mapId);
 		}
 		if (defaultMarkerIcon != null && defaultMarkerIcon.trim().length() > 0) {
 			printElement.setParameterValue(MapComponent.PARAMETER_DEFAULT_MARKER_ICON, defaultMarkerIcon);
