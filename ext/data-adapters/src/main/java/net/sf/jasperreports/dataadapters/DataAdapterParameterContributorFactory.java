@@ -85,7 +85,13 @@ public final class DataAdapterParameterContributorFactory implements ParameterCo
 	{
 		List<ParameterContributor> contributors = new ArrayList<>();
 
-		String dataAdapterUri = JRPropertiesUtil.getOwnProperty(context.getDataset(), PROPERTY_DATA_ADAPTER_LOCATION); 
+		String dataAdapterUri = JRPropertiesUtil.getOwnProperty(context.getDataset(), PROPERTY_DATA_ADAPTER_LOCATION);
+		if (dataAdapterUri == null)
+		{
+			dataAdapterUri = JRPropertiesUtil.getInstance(context.getJasperReportsContext()).getProperty(
+					PROPERTY_DATA_ADAPTER_LOCATION);
+		}
+
 		if (dataAdapterUri != null)
 		{
 			RepositoryUtil repository = RepositoryUtil.getInstance(context.getRepositoryContext());
