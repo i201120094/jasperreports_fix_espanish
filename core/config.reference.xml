@@ -341,6 +341,16 @@ Setting this property to 0 means that there is no limit.
     </description>
   </configProperty>
 
+  <!-- net.sf.jasperreports.jdbc.procedure.call.handler.factory -->
+
+  <configProperty name="net.sf.jasperreports.jdbc.procedure.call.handler.factory">
+    <description>
+Property specifying the name of the class implementing the 
+<api href="net/sf/jasperreports/engine/query/JRJdbcQueryExecuter.html">ProcedureCallHandlerFactory</api> interface used to handle stored procedure calls
+in report SQL queries.
+    </description>
+  </configProperty>
+
   <!-- net.sf.jasperreports.query.chunk.token.separators -->
 
   <configProperty name="net.sf.jasperreports.query.chunk.token.separators">

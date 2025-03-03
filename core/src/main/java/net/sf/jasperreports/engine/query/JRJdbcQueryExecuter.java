@@ -39,8 +39,6 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.TimeZone;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.sql.rowset.CachedRowSet;
 
@@ -52,10 +50,12 @@ import net.sf.jasperreports.engine.JRDataset;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JRPropertiesHolder;
+import net.sf.jasperreports.engine.JRPropertiesUtil;
 import net.sf.jasperreports.engine.JRResultSetDataSource;
 import net.sf.jasperreports.engine.JRRuntimeException;
 import net.sf.jasperreports.engine.JRValueParameter;
 import net.sf.jasperreports.engine.JasperReportsContext;
+import net.sf.jasperreports.engine.util.JRSingletonCache;
 
 
 /**
@@ -105,8 +105,8 @@ public class JRJdbcQueryExecuter extends JRAbstractQueryExecuter
 	
 	protected static final String CACHED_ROWSET_CLASS = "com.sun.rowset.CachedRowSetImpl";
 	
-	protected static final Pattern PROCEDURE_CALL_PATTERN = Pattern.compile("\\s*\\{\\s*call\\s+", 
-			Pattern.MULTILINE | Pattern.CASE_INSENSITIVE);
+	private static final JRSingletonCache<ProcedureCallHandlerFactory> procedureCallHandlerFactoryCache = 
+			new JRSingletonCache<>(ProcedureCallHandlerFactory.class);
 
 	protected Connection connection;
 	
@@ -486,7 +486,7 @@ public class JRJdbcQueryExecuter extends JRAbstractQueryExecuter
 				
 				if (isProcedureCall)
 				{
-					initProcedureCall(callableStatement);
+					procedureCallHandler.init(callableStatement);
 				}
 
 				visitQueryParameters(new QueryParameterVisitor()
@@ -563,20 +563,21 @@ public class JRJdbcQueryExecuter extends JRAbstractQueryExecuter
 
 	protected boolean isProcedureCall(String queryString) throws SQLException
 	{
-		if (!OracleProcedureCallHandler.isOracle(connection))
+		String factoryClass = JRPropertiesUtil.getInstance(getJasperReportsContext()).getProperty(dataset, ProcedureCallHandlerFactory.PROPERTY_PROCEDURE_CALL_HANDLER_FACTORY);
+		if (factoryClass != null && factoryClass.trim().length() > 0)
 		{
-			//only supporting oracle for now
-			return false;
+			try
+			{
+				ProcedureCallHandlerFactory factory = procedureCallHandlerFactoryCache.getCachedInstance(factoryClass);
+				procedureCallHandler = factory.createProcedureCallHandler();
+			}
+			catch (JRException e)
+			{
+				throw new JRRuntimeException(e);
+			}
 		}
 		
-		Matcher matcher = PROCEDURE_CALL_PATTERN.matcher(queryString);
-		return matcher.find() && matcher.start() == 0;
-	}
-	
-	protected void initProcedureCall(CallableStatement callableStatement) throws SQLException
-	{
-		procedureCallHandler = new OracleProcedureCallHandler();
-		procedureCallHandler.init(callableStatement);
+		return procedureCallHandler == null ? false : procedureCallHandler.isHandling(connection, queryString);
 	}
 
 

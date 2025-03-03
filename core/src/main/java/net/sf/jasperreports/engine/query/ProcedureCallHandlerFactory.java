@@ -23,24 +23,27 @@
  */
 package net.sf.jasperreports.engine.query;
 
-import java.sql.CallableStatement;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import net.sf.jasperreports.annotations.properties.Property;
+import net.sf.jasperreports.annotations.properties.PropertyScope;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRPropertiesUtil;
+import net.sf.jasperreports.properties.PropertyConstants;
 
 /**
- * @author Lucian Chirita (lucianc@users.sourceforge.net)
+ * @author Teodor Danciu (teodord@users.sourceforge.net)
  */
-public interface ProcedureCallHandler
+public interface ProcedureCallHandlerFactory
 {
+	/**
+	 * Property specifying the name of the ProcedureCallHandlerFactory implementation to use.
+	 */
+	@Property(
+			category = PropertyConstants.CATEGORY_DATA_SOURCE,
+			scopes = {PropertyScope.CONTEXT, PropertyScope.DATASET},
+			sinceVersion = PropertyConstants.VERSION_7_0_2
+			)
+	public static final String PROPERTY_PROCEDURE_CALL_HANDLER_FACTORY = JRPropertiesUtil.PROPERTY_PREFIX + "jdbc.procedure.call.handler.factory";
 
-	boolean isHandling(Connection connection,String queryString) throws SQLException;
-	
-	void init(CallableStatement statement);
-	
-	boolean setParameterValue(int parameterIndex, 
-			Class<?> type, Object value) throws SQLException;
-	
-	ResultSet execute() throws SQLException;
+	public ProcedureCallHandler createProcedureCallHandler() throws JRException;
 	
 }
