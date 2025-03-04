@@ -191,13 +191,6 @@ public class FillDatasetRun extends JRFillDatasetRun
 			return true;
 		}
 		
-		//no records in the dataset
-		if (first)
-		{
-			//might not be required, but it's safer to do it because it used to happen before dataset.next() 
-			startData();
-		}
-		
 		return false;
 	}
 	
