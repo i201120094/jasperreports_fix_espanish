@@ -37,6 +37,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.List;
+import java.util.Optional;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -215,10 +216,10 @@ public class JRXmlTemplateLoader
 		List<ReportLoader> loaders = jasperReportsContext.getExtensions(ReportLoader.class);
 		for (ReportLoader reportLoader : loaders)
 		{
-			JRTemplate template = reportLoader.loadTemplate(jasperReportsContext, bytes);
-			if (template != null)
+			Optional<JRTemplate> template = reportLoader.loadTemplate(jasperReportsContext, bytes);
+			if (template.isPresent())
 			{
-				return template;
+				return template.get();
 			}
 		}
 		//TODO legacyxml 
