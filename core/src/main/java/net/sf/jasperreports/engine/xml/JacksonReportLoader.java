@@ -24,6 +24,7 @@
 package net.sf.jasperreports.engine.xml;
 
 import java.io.ByteArrayInputStream;
+import java.util.Optional;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
@@ -57,16 +58,16 @@ public class JacksonReportLoader implements ReportLoader
 	}
 	
 	@Override
-	public JasperDesign loadReport(JasperReportsContext context, byte[] data) throws JRException
+	public Optional<JasperDesign> loadReport(JasperReportsContext context, byte[] data) throws JRException
 	{
 		boolean detectedReport = detectReportXML(data);
 		if (detectedReport)
 		{
 			ByteArrayInputStream dataStream = new ByteArrayInputStream(data);
 			JasperDesign report = JacksonUtil.getInstance(context).loadXml(dataStream, JasperDesign.class);
-			return report;
+			return Optional.of(report);
 		}
-		return null;
+		return Optional.empty();
 	}
 
 	protected boolean detectReportXML(byte[] data)
@@ -75,7 +76,7 @@ public class JacksonReportLoader implements ReportLoader
 	}
 
 	@Override
-	public JRTemplate loadTemplate(JasperReportsContext context, byte[] data)
+	public Optional<JRTemplate> loadTemplate(JasperReportsContext context, byte[] data)
 	{
 		boolean detectedReport = detectTemplateXML(data);
 		if (detectedReport)
@@ -83,9 +84,9 @@ public class JacksonReportLoader implements ReportLoader
 			ByteArrayInputStream dataStream = new ByteArrayInputStream(data);
 			JRSimpleTemplate template = JacksonUtil.getInstance(context).loadXml(
 					dataStream, JRSimpleTemplate.class);
-			return template;
+			return Optional.of(template);
 		}
-		return null;
+		return Optional.empty();
 	}
 
 	private boolean detectTemplateXML(byte[] data)
