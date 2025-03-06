@@ -33,6 +33,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import java.util.Optional;
 
 import net.sf.jasperreports.engine.DefaultJasperReportsContext;
 import net.sf.jasperreports.engine.JRException;
@@ -162,10 +163,10 @@ public class JRXmlLoader
 		for (ReportLoader reportLoader : loaders)
 		{
 			//TODO legacyxml ignoreConsistencyProblems
-			JasperDesign report = reportLoader.loadReport(jasperReportsContext, data);
-			if (report != null)
+			Optional<JasperDesign> report = reportLoader.loadReport(jasperReportsContext, data);
+			if (report.isPresent())
 			{
-				return report;
+				return report.get();
 			}
 		}
 		//TODO legacyxml 
