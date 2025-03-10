@@ -58,6 +58,7 @@ define("jasperreportsMapApi", function() {
             },
             configureDefaultPinElement: function (parentOptions) {
                 parentOptions.content = new PinElement().element;
+                return parentOptions;
             },
             createInfo: function (parentProps) {
                 var pp = parentProps;
@@ -380,22 +381,20 @@ define("jasperreportsMapApi", function() {
                             let markerImage;
                             if (!legendMarkerIcon) {
                                 if(markerSeriesConfig.firstMarkerIcon && markerSeriesConfig.firstMarkerIcon.length >0) {
-                                    const markerImage = new DOMParser().parseFromString(markerSeriesConfig.firstMarkerIcon, "text/html").documentElement;
-                                    markerImage.style.width = "16px";
-                                    markerImage.style.marginBottom = "5px";
-                                    markerImage.style.zIndex = 2;
-                                    divWrapper.insertAdjacentElement("beforeend", markerImage);
-                                } else if(defaultMarkerIcon ) {
+                                    markerImage = new DOMParser().parseFromString(markerSeriesConfig.firstMarkerIcon, "text/html").documentElement;
+                                    this.addLegendSeriesIcon(markerImage,divWrapper);
+                                } else if(defaultMarkerIcon && defaultMarkerIcon.length > 0) {
                                     legendMarkerIcon = defaultMarkerIcon;
+                                } else {
+                                    const imgElement = this.configureDefaultPinElement({});
+                                    markerImage = new DOMParser().parseFromString(imgElement.content.children[0].outerHTML, "text/html").documentElement;
+                                    this.addLegendSeriesIcon(markerImage,divWrapper);
                                 }
                             }
                             if (legendMarkerIcon) {
                                 markerImage = document.createElement("img");
                                 markerImage.src = legendMarkerIcon;
-                                markerImage.style.width = "16px";
-                                markerImage.style.marginBottom = "5px";
-                                markerImage.style.zIndex = 2;
-                                divWrapper.insertAdjacentElement("beforeend", markerImage);
+                                this.addLegendSeriesIcon(markerImage,divWrapper);
                             }
                         }
                         //to create additional room for svg default markers, which are not resizable
@@ -495,6 +494,12 @@ define("jasperreportsMapApi", function() {
                 return (size && size.length > 0
                     ? (size  === "tiny" ? 0.25 : (size === "small" ? 0.5 : (size === "mid" ? 0.75 : 1)))
                     : 1.0);
+            },
+            addLegendSeriesIcon: function(markerImage, divWrapper) {
+                markerImage.style.width = "16px";
+                markerImage.style.marginBottom = "5px";
+                markerImage.style.zIndex = 2;
+                divWrapper.insertAdjacentElement("beforeend", markerImage);
             }
         };
 
