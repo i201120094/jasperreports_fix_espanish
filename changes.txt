@@ -2,8 +2,16 @@
 JasperReports Library Change Log
 =============================================
 
-JasperReports 7.0.2 (2025-0x-xx)
+JasperReports 7.0.2 (2025-03-10)
 ---------------------------------------------
+
+- added support for horizontalPosition and shrinkWidth properties to table component and weight 
+property to table columns to better control table resize behavior when table columns are hidden or resized.
+
+- removed the Google Maps component, the Chrome server side rendering of Javascript visualizations extension,
+the interactivity extension as well as the PL/SQL and Oracle stored procedure query executer;
+
+- various dependencies upgrades including: Apache Batik 1.18, Apache POI 5.3.0 and Spring 6.2.3; 
 
 - minor bug fixes and improvements;
 
