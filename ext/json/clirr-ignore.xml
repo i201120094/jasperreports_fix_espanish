@@ -1,0 +1,18 @@
+<differences>
+	<difference>
+		<className>net/sf/jasperreports/json/query/*QueryExecuter</className>
+		<differenceType>7006</differenceType>
+		<method>*getJsonDataProviderInstance(java.lang.String, net.sf.jasperreports.engine.data.TextDataSourceAttributes)</method>
+		<to>net.sf.jasperreports.engine.data.RewindableDataSourceProvider</to>
+	</difference>
+	<difference>
+		<className>net/sf/jasperreports/json/data/Json*SourceProvider</className>
+		<differenceType>4001</differenceType>
+		<to>net/sf/jasperreports/data/*SourceProvider</to>
+	</difference>
+	<difference>
+		<className>net/sf/jasperreports/json/export/JsonExporterOutput</className>
+		<differenceType>7012</differenceType>
+		<method>*getInternalResourceHandler()</method>
+	</difference>
+</differences>
