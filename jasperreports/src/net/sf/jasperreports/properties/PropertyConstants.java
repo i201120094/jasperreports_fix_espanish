@@ -267,5 +267,7 @@ public interface PropertyConstants
 	String VERSION_6_21_3 = "6.21.3";
 	
 	String VERSION_6_21_4 = "6.21.4";
+
+	String VERSION_7_0_2 = "7.0.2";
 	
 }
