@@ -54,7 +54,12 @@ import net.sf.jasperreports.components.table.GroupCell;
 import net.sf.jasperreports.components.table.GroupRow;
 import net.sf.jasperreports.components.table.Row;
 import net.sf.jasperreports.components.table.TableComponent;
-import net.sf.jasperreports.engine.*;
+import net.sf.jasperreports.engine.JRComponentElement;
+import net.sf.jasperreports.engine.JRConstants;
+import net.sf.jasperreports.engine.JRDatasetRun;
+import net.sf.jasperreports.engine.JRElementDataset;
+import net.sf.jasperreports.engine.JRRuntimeException;
+import net.sf.jasperreports.engine.JasperReportsContext;
 import net.sf.jasperreports.engine.component.Component;
 import net.sf.jasperreports.engine.component.ComponentKey;
 import net.sf.jasperreports.engine.type.EvaluationTimeEnum;
@@ -480,6 +485,11 @@ public class ComponentsXmlWriter extends AbstractComponentXmlWriter
 		{
 			writer.addAttribute(JRXmlConstants.ATTRIBUTE_whenNoDataType, table.getWhenNoDataType());
 		}
+		if (isNewerVersionOrEqual(componentElement, reportWriter, JRConstants.VERSION_6_21_0))
+		{
+			writer.addAttribute(JRXmlConstants.ATTRIBUTE_horizontalPosition, table.getHorizontalPosition());
+			writer.addAttribute("shrinkWidth", table.shrinkWidth());
+		}
 		reportWriter.writeDatasetRun(table.getDatasetRun());
 		
 		ColumnVisitor<Void> columnWriter = new ColumnVisitor<Void>()
@@ -491,6 +501,10 @@ public class ComponentsXmlWriter extends AbstractComponentXmlWriter
 				{
 					writer.startElement("column");
 					writer.addAttribute("width", column.getWidth());
+					if (isNewerVersionOrEqual(componentElement, reportWriter, JRConstants.VERSION_6_21_0))
+					{
+						writer.addAttribute("weight", column.getWeight());
+					}
 					if (isNewerVersionOrEqual(componentElement, reportWriter, JRConstants.VERSION_4_6_0))
 					{
 						if (!reportWriter.isExcludeUuids())
@@ -530,6 +544,10 @@ public class ComponentsXmlWriter extends AbstractComponentXmlWriter
 				{
 					writer.startElement("columnGroup");
 					writer.addAttribute("width", columnGroup.getWidth());
+					if (isNewerVersionOrEqual(componentElement, reportWriter, JRConstants.VERSION_6_21_0))
+					{
+						writer.addAttribute("weight", columnGroup.getWeight());
+					}
 					if (isNewerVersionOrEqual(componentElement, reportWriter, JRConstants.VERSION_4_6_0))
 					{
 						if (!reportWriter.isExcludeUuids())

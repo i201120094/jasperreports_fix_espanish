@@ -746,6 +746,31 @@
 						</restriction>
 						</simpleType>
 					</attribute>
+					<attribute name="horizontalPosition" use="optional">
+						<annotation>
+							<documentation>The position of the table columns within the table element box.</documentation>
+						</annotation>
+						<simpleType>
+							<restriction base="string">
+								<enumeration value="Left">
+									<annotation>
+										<documentation>The table columns are positioned at the left of the table element box.</documentation>
+									</annotation>
+								</enumeration>
+								<enumeration value="Right">
+									<annotation>
+										<documentation>The table columns are positioned at the right of the table element box.</documentation>
+									</annotation>
+								</enumeration>
+								<enumeration value="Center">
+									<annotation>
+										<documentation>The table columns are centered within the table element box.</documentation>
+									</annotation>
+								</enumeration>
+							</restriction>
+						</simpleType>
+					</attribute>
+					<attribute name="shrinkWidth" type="boolean" use="optional"/>
 				</extension>
 			</complexContent>
 		</complexType>
@@ -767,8 +792,9 @@
 			<annotation>
 				<documentation>This attribute is auto-generated and is used to uniquely identify elements across multiple report templates.</documentation>
 			</annotation>
-		</attribute>  
+		</attribute>
 		<attribute name="width" use="required" type="unsignedInt"/>
+		<attribute name="weight" use="optional" type="unsignedInt"/>
 	</complexType>
 	
 	<element name="columnGroup">

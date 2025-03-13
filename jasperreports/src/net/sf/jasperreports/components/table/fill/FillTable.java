@@ -57,6 +57,7 @@ import net.sf.jasperreports.engine.fill.BuiltinExpressionEvaluatorFactory;
 import net.sf.jasperreports.engine.fill.JRFillCloneFactory;
 import net.sf.jasperreports.engine.fill.JRFillContext;
 import net.sf.jasperreports.engine.fill.JRFillObjectFactory;
+import net.sf.jasperreports.engine.type.HorizontalPosition;
 import net.sf.jasperreports.engine.util.JRReportUtils;
 import net.sf.jasperreports.engine.xml.JRXmlWriter;
 import net.sf.jasperreports.export.AccessibilityUtil;
@@ -78,6 +79,10 @@ public class FillTable extends SubreportFillComponent
 	
 	private boolean filling;
 	private List<FillColumn> fillColumns;
+	
+	private HorizontalPosition horizontalPosition;
+	private Boolean shrinkWidth;
+	private Integer columnWeight;
 
 	public FillTable(TableComponent table, JRFillObjectFactory factory)
 	{
@@ -101,6 +106,18 @@ public class FillTable extends SubreportFillComponent
 	{
 		return ((TableJasperReport)fillSubreport.getJasperReport()).getBaseReport();
 	}
+	
+	@Override
+	protected HorizontalPosition getHorizontalPosition()
+	{
+		return horizontalPosition;
+	}
+	
+	@Override
+	protected Boolean shrinkWidth()
+	{
+		return shrinkWidth;
+	}
 
 	@Override
 	public void evaluate(byte evaluation) throws JRException
@@ -113,9 +130,44 @@ public class FillTable extends SubreportFillComponent
 		
 		filling = false;
 		
+		horizontalPosition = table.getHorizontalPosition();
+		if (horizontalPosition == null)
+		{
+			String strHorizontalPosition = 
+				fillContext.getFiller().getPropertiesUtil().getProperty(
+					TableComponent.CONFIG_PROPERTY_HORIZONTAL_POSITION,
+					fillContext.getComponentElement(),
+					fillContext.getFiller().getMasterFiller().getJasperReport()
+					);
+			horizontalPosition = HorizontalPosition.getByName(strHorizontalPosition);
+		}
+
+		shrinkWidth = table.shrinkWidth();
+		if (shrinkWidth == null)
+		{
+			String strShrinkWidth = 
+				fillContext.getFiller().getPropertiesUtil().getProperty(
+					TableComponent.CONFIG_PROPERTY_SHRINK_WIDTH,
+					fillContext.getComponentElement(),
+					fillContext.getFiller().getMasterFiller().getJasperReport()
+					);
+			shrinkWidth = Boolean.valueOf(strShrinkWidth);
+		}
+
+		String strColumnWeight = fillContext.getFiller().getPropertiesUtil().getProperty(
+			TableComponent.CONFIG_PROPERTY_COLUMN_WEIGHT,
+			fillContext.getComponentElement(),
+			fillContext.getFiller().getMasterFiller().getJasperReport()
+			);
+		if (strColumnWeight != null && strColumnWeight.trim().length() > 0)
+		{
+			columnWeight = Integer.parseInt(strColumnWeight);
+		}
+		
 		evaluateColumns(evaluation);
 		if (!fillColumns.isEmpty())
 		{
+			resizeWeightedColumns(fillColumns, fillContext.getComponentElement().getWidth() - fillWidth, fillWeight);
 			createFillSubreport();
 			setTableInstanceCounter();
 			fillSubreport.evaluateSubreport(evaluation);
@@ -215,7 +267,7 @@ public class FillTable extends SubreportFillComponent
 				if (toPrint)
 				{
 					JRPropertiesMap properties = evaluateProperties(column, evaluation);
-					return new FillColumn(column, properties); 
+					return new FillColumn(column, columnWeight, properties); 
 				}
 				return null;
 			}
@@ -237,12 +289,14 @@ public class FillTable extends SubreportFillComponent
 					List<BaseColumn> columns = columnGroup.getColumns();
 					List<FillColumn> subColumns = new ArrayList<>(columns.size());
 					int printWidth = 0;
+					int printWeight = 0;
 					for (BaseColumn column : columns)
 					{
 						FillColumn fillSubColumn = column.visitColumn(this);
 						if (fillSubColumn != null)
 						{
 							printWidth += fillSubColumn.getWidth();
+							printWeight += fillSubColumn.getWeight();
 							subColumns.add(fillSubColumn);
 						}
 					}
@@ -256,7 +310,7 @@ public class FillTable extends SubreportFillComponent
 					else
 					{
 						JRPropertiesMap properties = evaluateProperties(columnGroup, evaluation);
-						fillColumn = new FillColumn(columnGroup, printWidth, subColumns, properties);
+						fillColumn = new FillColumn(columnGroup, printWidth, subColumns, printWeight, properties);
 					}
 				}
 				else
@@ -278,6 +332,7 @@ public class FillTable extends SubreportFillComponent
 		List<BaseColumn> columns = table.getColumns();
 		fillColumns = new ArrayList<>(columns.size());
 		fillWidth = 0;
+		fillWeight = 0;
 		for (BaseColumn column : columns)
 		{
 			FillColumn fillColumn = column.visitColumn(columnEvaluator);
@@ -285,7 +340,39 @@ public class FillTable extends SubreportFillComponent
 			{
 				fillColumns.add(fillColumn);
 				fillWidth += fillColumn.getWidth();
+				fillWeight += fillColumn.getWeight();
 			}
+		}
+	}
+	
+	private static void resizeWeightedColumns(List<FillColumn> fillColumns, int deltaWidth, int totalWeight)
+	{
+		if (
+			fillColumns != null 
+			&& !fillColumns.isEmpty()
+			&& totalWeight > 0
+			&& deltaWidth > 0
+			)
+		{
+			for (FillColumn fillColumn : fillColumns)
+			{
+				int colWidthBeforeWeigthResize = fillColumn.getWidth();
+				
+				resizeWeightedColumn(fillColumn, deltaWidth, totalWeight);
+
+				resizeWeightedColumns(fillColumn.getSubcolumns(), fillColumn.getWidth() - colWidthBeforeWeigthResize, fillColumn.getSubColsTotalWeight());
+			}
+		}
+	}
+
+	private static void resizeWeightedColumn(FillColumn fillColumn, int deltaWidth, int totalWeight)
+	{
+		if (fillColumn.getWeight() > 0)
+		{
+			fillColumn.setWidth(
+				fillColumn.getWidth()
+				+ (int)((float)deltaWidth * fillColumn.getWeight() / totalWeight)
+				);
 		}
 	}
 	
