@@ -34,7 +34,7 @@ import java.sql.SQLException;
 public interface ProcedureCallHandler
 {
 
-	boolean isHandling(Connection connection,String queryString) throws SQLException;
+	boolean isHandling(Connection connection, String queryString) throws SQLException;
 	
 	void init(CallableStatement statement);
 	

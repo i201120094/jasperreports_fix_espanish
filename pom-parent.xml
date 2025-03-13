@@ -281,6 +281,17 @@
 					<suppressionFile>${jasperreports.root.dir}/owasp-suppressions.xml</suppressionFile>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>clirr-maven-plugin</artifactId>
+				<version>${clirr-maven-plugin.version}</version>
+				<configuration>
+					<comparisonVersion>7.0.0</comparisonVersion>
+					<ignoredDifferencesFile>${basedir}/clirr-ignore.xml</ignoredDifferencesFile>
+					<failOnError>true</failOnError>
+					<logResults>true</logResults>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 </project>

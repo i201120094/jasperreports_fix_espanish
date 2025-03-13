@@ -29,15 +29,6 @@
 					</systemPropertyVariables>
 				</configuration>
 			</plugin>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>clirr-maven-plugin</artifactId>
-				<version>${clirr-maven-plugin.version}</version>
-				<configuration>
-					<comparisonVersion>6.21.2</comparisonVersion>
-					<ignoredDifferencesFile>${basedir}/clirr-ignore.xml</ignoredDifferencesFile>
-				</configuration>
-			</plugin>
 		</plugins>
 	</build>
 </project>
