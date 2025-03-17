@@ -1013,7 +1013,7 @@ public class JRFillCrosstab extends JRFillElement implements JRCrosstab, JROrigi
 			RowGroupInteractiveInfo groupInfo = new RowGroupInteractiveInfo();
 			groupInfo.setSortable(true);// TODO lucianc
 			BucketOrder order = bucketOrder(bucket);
-			groupInfo.setOrder(order);
+			groupInfo.setOrder(order == null ? null : order.name());
 			rowGroups.add(groupInfo);
 		}
 		genericElement.setParameterValue(CrosstabConstants.ELEMENT_PARAMETER_ROW_GROUPS, rowGroups);
@@ -1049,7 +1049,7 @@ public class JRFillCrosstab extends JRFillElement implements JRCrosstab, JROrigi
 			{
 				columnOrder = BucketOrder.fromSortOrderEnum(orderByColumnInfo.getOrder());
 			}
-			dataColumn.setOrder(columnOrder);
+			dataColumn.setOrder(columnOrder == null ? null : columnOrder.name());
 
 			dataColumns.add(dataColumn);
 		}

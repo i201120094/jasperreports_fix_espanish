@@ -26,7 +26,6 @@ package net.sf.jasperreports.crosstabs.interactive;
 import java.io.Serializable;
 
 import net.sf.jasperreports.engine.JRConstants;
-import net.sf.jasperreports.engine.analytics.dataset.BucketOrder;
 
 /**
  * @author Lucian Chirita (lucianc@users.sourceforge.net)
@@ -37,14 +36,14 @@ public class RowGroupInteractiveInfo implements Serializable
 	private static final long serialVersionUID = JRConstants.SERIAL_VERSION_UID;
 
 	private boolean sortable;
-	private BucketOrder order;
+	private String order;
 
-	public BucketOrder getOrder()
+	public String getOrder()
 	{
 		return order;
 	}
 
-	public void setOrder(BucketOrder order)
+	public void setOrder(String order)
 	{
 		this.order = order;
 	}
