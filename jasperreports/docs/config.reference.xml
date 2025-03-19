@@ -2912,8 +2912,35 @@ Property that enables/disables the automatic addition of specific custom propert
 that would in turn trigger the creation of special document accessibility tags during PDF export.
     </description>
   </configProperty>
-  
-  
+
+
+  <!-- net.sf.jasperreports.components.table.horizontal.position -->
+
+  <configProperty name="net.sf.jasperreports.components.table.horizontal.position">
+    <description>
+Property that provides the default value for the horizontal position of the table columns within the table element box.
+    </description>
+  </configProperty>
+
+
+  <!-- net.sf.jasperreports.components.table.shrink.width -->
+
+  <configProperty name="net.sf.jasperreports.components.table.shrink.width">
+    <description>
+Property that provides the default value for the shrinkWidth setting of the table component.
+    </description>
+  </configProperty>
+
+
+  <!-- net.sf.jasperreports.components.table.column.weight -->
+
+  <configProperty name="net.sf.jasperreports.components.table.column.weight">
+    <description>
+Property that provides the default value for the weight of a table component column.
+    </description>
+  </configProperty>
+
+
   <!-- net.sf.jasperreports.components.table.accessible -->
   
   <configProperty name="net.sf.jasperreports.components.table.accessible">
@@ -5132,6 +5159,16 @@ Allowed values are:
 <li><code>true</code></li>
 <li><code>false</code> - this is the default value.</li>
 </ul>
+    </description>
+  </configProperty>
+  
+  
+  <!-- net.sf.jasperreports.export.xls.average.char.width.factor -->
+  
+  <configProperty name="net.sf.jasperreports.export.xls.average.char.width.factor">
+    <description>
+This property specifies the multiplication factor to be applied to the report fill time calculated average char width that is used 
+to estimate the text length for XLS/XLSX/ODS export column autofit feature.
     </description>
   </configProperty>
   

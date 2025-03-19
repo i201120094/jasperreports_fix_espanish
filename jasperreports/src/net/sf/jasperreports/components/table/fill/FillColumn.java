@@ -26,6 +26,8 @@ package net.sf.jasperreports.components.table.fill;
 import java.util.List;
 
 import net.sf.jasperreports.components.table.BaseColumn;
+import net.sf.jasperreports.components.table.Column;
+import net.sf.jasperreports.components.table.ColumnGroup;
 import net.sf.jasperreports.engine.JRPropertiesHolder;
 import net.sf.jasperreports.engine.JRPropertiesMap;
 
@@ -40,25 +42,62 @@ public class FillColumn implements JRPropertiesHolder
 	private BaseColumn tableColumn;
 	private int width;
 	private List<FillColumn> subcolumns;
+	private final Integer defaultWeight;
+	private int subColsTotalWeight; 
 	private Integer colSpan;
 
 	private JRPropertiesMap properties;
 	
-	public FillColumn(BaseColumn tableColumn, JRPropertiesMap properties)
+	public FillColumn(
+		Column column, 
+		Integer defaultWeight,
+		JRPropertiesMap properties
+		)
 	{
-		this(tableColumn,  
-				tableColumn.getWidth(), 
-				null, properties);
+		this(
+			column,  
+			column.getWidth(),
+			null, 
+			0,
+			defaultWeight,
+			properties
+			);
 	}
 	
-	public FillColumn(BaseColumn tableColumn, int width,
-			List<FillColumn> subcolumns, JRPropertiesMap properties)
+	public FillColumn(
+		ColumnGroup columnGroup, 
+		int width,
+		List<FillColumn> subcolumns, 
+		int subColsTotalWeight,
+		JRPropertiesMap properties
+		)
+	{
+		this(
+			columnGroup,  
+			width,
+			subcolumns, 
+			subColsTotalWeight,
+			null,
+			properties
+			);
+	}
+	
+	private FillColumn(
+		BaseColumn tableColumn, 
+		int width,
+		List<FillColumn> subcolumns, 
+		int subColsTotalWeight,
+		Integer defaultWeight,
+		JRPropertiesMap properties
+		)
 	{
 		super();
 		
 		this.tableColumn = tableColumn;
 		this.width = width;
 		this.subcolumns = subcolumns;
+		this.subColsTotalWeight = subColsTotalWeight;
+		this.defaultWeight = defaultWeight;
 		this.properties = properties;
 	}
 
@@ -70,6 +109,21 @@ public class FillColumn implements JRPropertiesHolder
 	public int getWidth()
 	{
 		return width;
+	}
+
+	public void setWidth(int width)
+	{
+		this.width = width;
+	}
+
+	public int getWeight()
+	{
+		return tableColumn.getWeight() == null ? (defaultWeight == null ? subColsTotalWeight : defaultWeight) : tableColumn.getWeight();
+	}
+
+	public int getSubColsTotalWeight()
+	{
+		return subColsTotalWeight;
 	}
 
 	public int getColSpan()

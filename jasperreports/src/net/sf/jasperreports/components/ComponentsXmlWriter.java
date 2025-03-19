@@ -486,6 +486,11 @@ public class ComponentsXmlWriter extends AbstractComponentXmlWriter
 		{
 			writer.addAttribute(JRXmlConstants.ATTRIBUTE_whenNoDataType, table.getWhenNoDataType());
 		}
+		if (isNewerVersionOrEqual(componentElement, reportWriter, JRConstants.VERSION_6_21_5))
+		{
+			writer.addAttribute(JRXmlConstants.ATTRIBUTE_horizontalPosition, table.getHorizontalPosition());
+			writer.addAttribute("shrinkWidth", table.shrinkWidth());
+		}
 		reportWriter.writeDatasetRun(table.getDatasetRun());
 		
 		ColumnVisitor<Void> columnWriter = new ColumnVisitor<Void>()
@@ -497,6 +502,10 @@ public class ComponentsXmlWriter extends AbstractComponentXmlWriter
 				{
 					writer.startElement("column");
 					writer.addAttribute("width", column.getWidth());
+					if (isNewerVersionOrEqual(componentElement, reportWriter, JRConstants.VERSION_6_21_5))
+					{
+						writer.addAttribute("weight", column.getWeight());
+					}
 					if (isNewerVersionOrEqual(componentElement, reportWriter, JRConstants.VERSION_4_6_0))
 					{
 						if (!reportWriter.isExcludeUuids())
@@ -536,6 +545,10 @@ public class ComponentsXmlWriter extends AbstractComponentXmlWriter
 				{
 					writer.startElement("columnGroup");
 					writer.addAttribute("width", columnGroup.getWidth());
+					if (isNewerVersionOrEqual(componentElement, reportWriter, JRConstants.VERSION_6_21_5))
+					{
+						writer.addAttribute("weight", columnGroup.getWeight());
+					}
 					if (isNewerVersionOrEqual(componentElement, reportWriter, JRConstants.VERSION_4_6_0))
 					{
 						if (!reportWriter.isExcludeUuids())
