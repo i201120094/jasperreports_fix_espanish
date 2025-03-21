@@ -27,6 +27,7 @@ import net.sf.jasperreports.chrome.BrowserService;
 import net.sf.jasperreports.chrome.Chrome;
 import net.sf.jasperreports.chrome.ResourceManager;
 import net.sf.jasperreports.components.map.MapComponent;
+import net.sf.jasperreports.components.map.MapElementJsonHandler;
 import net.sf.jasperreports.components.map.MapUtils;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRGenericPrintElement;
@@ -152,8 +153,13 @@ public class ChromeMapElementImageProvider extends AbstractMapElementImageProvid
             velocityContext.put("backgroundColor", JRColorUtil.getColorHexa(element.getBackcolor()));
         }
 
+        velocityContext.put("externalScriptLoadApi", VelocityUtil.processTemplate(MapUtils.EXTERNAL_SCRIPT_LOAD_API_SCRIPT, (VelocityContext) null));
         velocityContext.put("jasperreportsMapApiScript", VelocityUtil.processTemplate(MapUtils.MAP_API_SCRIPT, (VelocityContext) null));
-        MapUtils.prepareContextForVelocityTemplate(velocityContext, jasperReportsContext, element);
+
+        MapUtils.addExternalURLs(velocityContext, element);
+
+        velocityContext.put("mapConfig", MapUtils.getSimplifiedMapConfig(jasperReportsContext, element));
+        velocityContext.put("mapCanvasId", "map_canvas_" + element.hashCode());
 
         return VelocityUtil.processTemplate(PAGE_TEMPLATE_RESOURCE, velocityContext);
     }

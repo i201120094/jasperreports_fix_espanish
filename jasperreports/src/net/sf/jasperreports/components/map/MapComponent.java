@@ -50,16 +50,17 @@ import net.sf.jasperreports.properties.PropertyConstants;
 public interface MapComponent extends Component, JRCloneable
 {
 	// properties at report element level:
-	
+
 	public static final String PROPERTY_PREFIX = JRPropertiesUtil.PROPERTY_PREFIX + "components.map.";
-	
+	public static final String DEMO_MAP_ID = "DEMO_MAP_ID";
+
 	@Property(
 			category = PropertyConstants.CATEGORY_MAP,
 			scopes = {PropertyScope.CONTEXT, PropertyScope.REPORT},
 			sinceVersion = PropertyConstants.VERSION_5_5_0
 			)
 	public static final String PROPERTY_KEY = PROPERTY_PREFIX + "key";
-	
+
 	@Property(
 			category = PropertyConstants.CATEGORY_MAP,
 			scopes = {PropertyScope.CONTEXT, PropertyScope.REPORT},
@@ -85,6 +86,14 @@ public interface MapComponent extends Component, JRCloneable
 			sinceVersion = PropertyConstants.VERSION_6_4_3
 			)
 	public static final String PROPERTY_GOOGLE_VERSION = PROPERTY_PREFIX + "google.version";
+
+	@Property(
+			category = PropertyConstants.CATEGORY_MAP,
+			scopes = {PropertyScope.CONTEXT, PropertyScope.REPORT, PropertyScope.ELEMENT},
+			sinceVersion = PropertyConstants.VERSION_6_21_0,
+			defaultValue = DEMO_MAP_ID
+			)
+	public static final String PROPERTY_GOOGLE_MAP_ID = PROPERTY_PREFIX + "google.map.id";
 
 	@Property(
 			category = PropertyConstants.CATEGORY_MAP,
@@ -642,6 +651,21 @@ public interface MapComponent extends Component, JRCloneable
 	 */
 	public static final String PARAMETER_LANGUAGE = "language";
 	
+	/**
+	 * The name of the parameter that provides the Google API version.
+	 */
+	public static final String PARAMETER_V = "v";
+	
+	/**
+	 * The name of the parameter that provides the client ID.
+	 */
+	public static final String PARAMETER_CLIENT = "client";
+	
+	/**
+	 * The name of the parameter that provides the map ID.
+	 */
+	public static final String PARAMETER_MAP_ID = "mapId";
+
 	/**
 	 * The name of the parameter that provides the zoom factor.
 	 */
