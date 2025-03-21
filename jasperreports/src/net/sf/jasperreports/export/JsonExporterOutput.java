@@ -39,5 +39,10 @@ public interface JsonExporterOutput extends WriterExporterOutput
 	/**
 	 * 
 	 */
-	public HtmlResourceHandler getResourceHandler(); 
+	public HtmlResourceHandler getResourceHandler();
+
+	/**
+	 *
+	 */
+	public HtmlResourceHandler getInternalResourceHandler();
 }

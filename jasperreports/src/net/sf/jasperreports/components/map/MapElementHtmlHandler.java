@@ -71,13 +71,16 @@ public class MapElementHtmlHandler implements GenericElementHtmlHandler
         if (reportContext == null)
         {
             contextMap.put("jasperreportsMapApiScript", VelocityUtil.processTemplate(MapUtils.MAP_API_SCRIPT, (VelocityContext) null));
-            MapUtils.prepareContextForVelocityTemplate(contextMap, context.getJasperReportsContext(), element);
+            contextMap.put("externalScriptLoadApi", VelocityUtil.processTemplate(MapUtils.EXTERNAL_SCRIPT_LOAD_API_SCRIPT, (VelocityContext) null));
+            contextMap.put("overlappingMarkerSpiderfierScript", VelocityUtil.processTemplate(MapUtils.OVERLAPPING_MARKER_SPIDERFIER_SCRIPT, (VelocityContext) null));
+
+            MapUtils.addExternalURLs(contextMap, element);
+
+            contextMap.put("mapConfig", MapUtils.getSimplifiedMapConfig(context.getJasperReportsContext(), element));
 
             if (context.getValue(FIRST_ATTEMPT_PARAM) == null)
             {
                 context.setValue(FIRST_ATTEMPT_PARAM, true);
-
-                //FIXME: support for parametrized http://maps.google.com/maps/api/js script (see MapElementHtmlTemplate.vm)
                 contextMap.put("exporterFirstAttempt", true);
             }
         }
@@ -85,7 +88,7 @@ public class MapElementHtmlHandler implements GenericElementHtmlHandler
 		return VelocityUtil.processTemplate(MAP_ELEMENT_HTML_TEMPLATE, contextMap);
 	}
 
-	@Override
+    @Override
 	public boolean toExport(JRGenericPrintElement element)
     {
 		return true;

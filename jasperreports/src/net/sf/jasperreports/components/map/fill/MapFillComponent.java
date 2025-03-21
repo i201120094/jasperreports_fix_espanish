@@ -104,6 +104,7 @@ public class MapFillComponent extends BaseFillComponent implements FillContextPr
 	private String key;
 	private String googleVersion;
 	private String version;
+	private String mapId;
 	private String reqParams;
 	private String defaultMarkerIcon;
 
@@ -181,13 +182,15 @@ public class MapFillComponent extends BaseFillComponent implements FillContextPr
 	
 	protected void evaluateMap(byte evaluation) throws JRException
 	{
-		JRPropertiesHolder propertiesHolder = fillContext.getComponentElement().getParentProperties();
+		JRComponentElement componentElement = fillContext.getComponentElement();
+		JRPropertiesHolder propertiesHolder = componentElement.getParentProperties();
 		JRPropertiesUtil util = JRPropertiesUtil.getInstance(fillContext.getFiller().getJasperReportsContext());
 		clientId = util.getProperty(propertiesHolder, MapComponent.PROPERTY_CLIENT_ID);
 		signature = util.getProperty(propertiesHolder, MapComponent.PROPERTY_SIGNATURE);
 		key = util.getProperty(propertiesHolder, MapComponent.PROPERTY_KEY);
 		defaultMarkerIcon = util.getProperty(propertiesHolder, MapComponent.PROPERTY_DEFAULT_MARKER_ICON);
 		googleVersion = util.getProperty(propertiesHolder, MapComponent.PROPERTY_GOOGLE_VERSION);
+		mapId = util.getProperty(componentElement, MapComponent.PROPERTY_GOOGLE_MAP_ID);
 		@SuppressWarnings("deprecation")
 		String depVersion = util.getProperty(propertiesHolder, MapComponent.PROPERTY_VERSION);
 		version = depVersion;
@@ -460,6 +463,27 @@ public class MapFillComponent extends BaseFillComponent implements FillContextPr
 		String reqParams = getReqParams();
 		if(reqParams != null && reqParams.trim().length() > 0) {
 			printElement.setParameterValue(MapComponent.PARAMETER_REQ_PARAMS, reqParams);
+			if (language != null && language.trim().length() > 0) {
+				printElement.setParameterValue(MapComponent.PARAMETER_LANGUAGE, language);
+			}
+			if (key != null && key.trim().length() > 0) {
+				printElement.setParameterValue(MapComponent.PROPERTY_KEY, key);
+			}
+			if (clientId != null && clientId.trim().length() > 0) {
+				printElement.setParameterValue(MapComponent.PARAMETER_CLIENT, clientId);
+			}
+			if (signature != null && signature.trim().length() > 0) {
+				printElement.setParameterValue(MapComponent.PROPERTY_SIGNATURE, signature);
+			}
+			if(googleVersion != null && googleVersion.trim().length() > 0) {
+				printElement.setParameterValue(MapComponent.PARAMETER_V, googleVersion);
+			} else if(version != null && version.trim().length() > 0 && (version.indexOf('.') < 0 || version.indexOf(".exp") > -1)) {
+				// avoiding name collision of the version property
+				printElement.setParameterValue(MapComponent.PARAMETER_V, version);
+			}
+		}
+		if (mapId != null && mapId.trim().length() > 0) {
+			printElement.setParameterValue(MapComponent.PARAMETER_MAP_ID, mapId);
 		}
 		if (defaultMarkerIcon != null && defaultMarkerIcon.trim().length() > 0) {
 			printElement.setParameterValue(MapComponent.PARAMETER_DEFAULT_MARKER_ICON, defaultMarkerIcon);
@@ -522,13 +546,14 @@ public class MapFillComponent extends BaseFillComponent implements FillContextPr
 				rParams += "&key=" + key;
 			}
 			
+			//rParams += "&loading=async";
 			if(googleVersion != null && googleVersion.trim().length() > 0) {
 				rParams += "&v=" + googleVersion;
 			} else if(version != null && version.trim().length() > 0 && (version.indexOf('.') < 0 || version.indexOf(".exp") > -1)) {
 				// avoiding name collision of the version property
 				rParams += "&v=" + version;
 			}
-			reqParams = rParams.length() == 0 ? null : rParams.substring(1);
+			reqParams = rParams.length() == 0 ? null : rParams.substring(1) + "&loading=async";
 		}
 		return reqParams;
 	}

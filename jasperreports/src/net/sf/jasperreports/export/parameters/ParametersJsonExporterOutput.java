@@ -47,6 +47,7 @@ public class ParametersJsonExporterOutput extends ParametersWriterExporterOutput
 	 */
 	private HtmlResourceHandler fontHandler;
 	private HtmlResourceHandler resourceHandler;
+	private HtmlResourceHandler internalResourceHandler;
 	
 	/**
 	 * 
@@ -89,12 +90,13 @@ public class ParametersJsonExporterOutput extends ParametersWriterExporterOutput
 						}
 					}
 
-					if (fontHandler == null || resourceHandler == null)
+					if (fontHandler == null || resourceHandler == null || internalResourceHandler == null)
 					{
 						File resourcesDir = new File(destFile.getParent(), destFile.getName() + "_files");
 						FileHtmlResourceHandler defaultHandler = new FileHtmlResourceHandler(resourcesDir, resourcesDir.getName() + "/{0}");
 						fontHandler = fontHandler == null ? defaultHandler : fontHandler;
 						resourceHandler = resourceHandler == null ? defaultHandler : resourceHandler;
+						internalResourceHandler = internalResourceHandler == null ? defaultHandler : internalResourceHandler;
 					}
 				}
 			}
@@ -108,8 +110,14 @@ public class ParametersJsonExporterOutput extends ParametersWriterExporterOutput
 	}
 
 	@Override
-	public HtmlResourceHandler getResourceHandler() 
+	public HtmlResourceHandler getResourceHandler()
 	{
 		return resourceHandler;
+	}
+
+	@Override
+	public HtmlResourceHandler getInternalResourceHandler()
+	{
+		return internalResourceHandler;
 	}
 }

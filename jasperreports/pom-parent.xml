@@ -77,7 +77,7 @@
 		<url>${scmUrl}</url>
 	</scm>
 	<properties>
-		<revision>develop-JS-74798-SNAPSHOT</revision>
+		<revision>develop-JRL-1952-upgrade-map-comp-SNAPSHOT</revision>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<skipInstall>true</skipInstall>
 		<skipDeploy>true</skipDeploy>
