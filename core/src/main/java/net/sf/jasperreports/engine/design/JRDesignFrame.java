@@ -117,6 +117,29 @@ public class JRDesignFrame extends JRDesignElement implements JRFrame
 
 	
 	/**
+	 *
+	 */
+	@JsonSetter
+	private void setChildren(List<JRChild> children)
+	{
+		if (children != null)
+		{
+			for (JRChild child : children)
+			{
+				if (child instanceof JRDesignElement)
+				{
+					addElement((JRDesignElement)child);
+				}
+				else
+				{
+					addElementGroup((JRDesignElementGroup)child);
+				}
+			}
+		}
+	}
+
+
+	/**
 	 * Adds a sub element to the frame.
 	 * 
 	 * @param element the element to add
