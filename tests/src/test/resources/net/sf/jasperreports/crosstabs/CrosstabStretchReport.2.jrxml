@@ -1,5 +1,6 @@
 <jasperReport name="CrosstabStretchReport.2" language="java" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" whenResourceMissingType="Key" uuid="885d79b2-35fe-4141-b51c-e2445e098e6d">
 	<property name="net.sf.jasperreports.data.adapter" value="net/sf/jasperreports/data/EmptyDataAdapter.30.jrdax"/>
+	<property name="net.sf.jasperreports.crosstab.interactive" value="false"/>
 	<style name="Sans_Normal" default="true" fontName="DejaVu Sans" fontSize="10.0"/>
 	<summary height="60" splitType="Stretch">
 		<element kind="crosstab" uuid="261e4a5e-10ff-4206-be94-2147125a3514" mode="Opaque" x="0" y="0" width="550" height="45" backcolor="#C0C0C0" columnBreakOffset="40">
