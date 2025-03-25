@@ -135,10 +135,10 @@ public abstract class AbstractSampleApp
 		{
 			//Change these settings according to your local configuration
 			String driver = "org.hsqldb.jdbcDriver";
-			String connectString = "jdbc:hsqldb:hsql://localhost";
+			String hsqldbServerPort = System.getProperty("hsqldb.server.port");
+			String connectString = "jdbc:hsqldb:hsql://localhost" + (hsqldbServerPort != null ? (":" + hsqldbServerPort) : "");
 			String user = "sa";
 			String password = "";
-
 
 			Class.forName(driver);
 			conn = DriverManager.getConnection(connectString, user, password);
@@ -146,7 +146,6 @@ public abstract class AbstractSampleApp
 		catch (ClassNotFoundException | SQLException e)
 		{
 			throw new JRException(e);
-			
 		}
 
 		return conn;

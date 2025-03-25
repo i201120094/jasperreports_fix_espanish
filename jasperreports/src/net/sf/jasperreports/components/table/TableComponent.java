@@ -25,6 +25,8 @@ package net.sf.jasperreports.components.table;
 
 import java.util.List;
 
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+
 import net.sf.jasperreports.annotations.properties.Property;
 import net.sf.jasperreports.annotations.properties.PropertyScope;
 import net.sf.jasperreports.engine.DatasetRunHolder;
@@ -33,6 +35,7 @@ import net.sf.jasperreports.engine.JRDatasetRun;
 import net.sf.jasperreports.engine.JRPropertiesUtil;
 import net.sf.jasperreports.engine.JRVisitable;
 import net.sf.jasperreports.engine.component.Component;
+import net.sf.jasperreports.engine.type.HorizontalPosition;
 import net.sf.jasperreports.properties.PropertyConstants;
 
 
@@ -53,6 +56,41 @@ public interface TableComponent extends Component, JRCloneable, JRVisitable, Dat
 			)
 	public static final String CONFIG_PROPERTY_WHEN_NO_DATA_TYPE = JRPropertiesUtil.PROPERTY_PREFIX + "components.table.when.no.data.type";
 
+	/**
+	 * Property that specifies a default value for the <code>horizontalPosition</code> attribute of table components.
+	 */
+	@Property(
+			category = PropertyConstants.CATEGORY_TABLE,
+			defaultValue = "Left",
+			scopes = {PropertyScope.CONTEXT, PropertyScope.REPORT},
+			sinceVersion = PropertyConstants.VERSION_6_21_5,
+			valueType = HorizontalPosition.class
+			)
+	public static final String CONFIG_PROPERTY_HORIZONTAL_POSITION = JRPropertiesUtil.PROPERTY_PREFIX + "components.table.horizontal.position";
+
+	/**
+	 * Property that specifies a default value for the <code>shrinkWidth</code> attribute of table components.
+	 */
+	@Property(
+			category = PropertyConstants.CATEGORY_TABLE,
+			defaultValue = "false",
+			scopes = {PropertyScope.CONTEXT, PropertyScope.REPORT},
+			sinceVersion = PropertyConstants.VERSION_6_21_5,
+			valueType = Boolean.class
+			)
+	public static final String CONFIG_PROPERTY_SHRINK_WIDTH = JRPropertiesUtil.PROPERTY_PREFIX + "components.table.shrink.width";
+
+	/**
+	 * Property that specifies a default value for the <code>weight</code> attribute of a table component column.
+	 */
+	@Property(
+			category = PropertyConstants.CATEGORY_TABLE,
+			scopes = {PropertyScope.CONTEXT, PropertyScope.REPORT, PropertyScope.TABLE},
+			sinceVersion = PropertyConstants.VERSION_6_21_5,
+			valueType = Integer.class
+			)
+	public static final String CONFIG_PROPERTY_COLUMN_WEIGHT = JRPropertiesUtil.PROPERTY_PREFIX + "components.table.column.weight";
+
 	@Override
 	JRDatasetRun getDatasetRun();
 
@@ -60,6 +98,21 @@ public interface TableComponent extends Component, JRCloneable, JRVisitable, Dat
 	
 	WhenNoDataTypeTableEnum getWhenNoDataType();
 	
+	/**
+	 * Returns the position of the table columns within the table element box.
+	 * 
+	 * @return the position of the table columns within the table element box, 
+	 * <code>null</code> if no position is specified
+	 */
+	@JacksonXmlProperty(isAttribute = true)
+	HorizontalPosition getHorizontalPosition();
+
+	/**
+	 * Specifies if the table box should shrink to accommodate the smaller total width of visible columns.
+	 */
+	@JacksonXmlProperty(isAttribute = true)
+	Boolean shrinkWidth();
+
 	Row getTableHeader();
 	
 	Row getTableFooter();

@@ -103,6 +103,7 @@
 
 	<target name="fill" depends="prepare-test-classpath">
 		<java classname="${sample.app.name}" fork="true" dir="${sample.dir}">
+			<jvmarg value="-Dhsqldb.server.port=59001"/>
 			<arg value="fill"/>
 			<classpath refid="sample-classpath"/>
 		</java>
@@ -330,6 +331,7 @@
 	<target name="test" depends="prepare-test-classpath">
 		<java classname="${sample.app.name}" fork="true" dir="${sample.dir}">
 			<jvmarg value="-Djava.awt.headless=true"/>
+			<jvmarg value="-Dhsqldb.server.port=59001"/>
 			<arg value="test"/>
 			<classpath refid="sample-classpath"/>
 		</java>
