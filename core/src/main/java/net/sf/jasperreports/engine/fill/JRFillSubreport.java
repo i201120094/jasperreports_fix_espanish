@@ -840,12 +840,13 @@ public class JRFillSubreport extends JRFillElement implements JRSubreport
 	@Override
 	protected boolean prepare(
 		int availableHeight,
-		boolean isOverflow
+		boolean isOverflow,
+		boolean isOverflowAllowed
 		) throws JRException
 	{
 		boolean willOverflow = false;
 
-		super.prepare(availableHeight, isOverflow);
+		super.prepare(availableHeight, isOverflow, isOverflowAllowed);
 		
 		if (subreportFiller == null)
 		{

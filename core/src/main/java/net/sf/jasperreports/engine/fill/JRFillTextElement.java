@@ -643,12 +643,13 @@ public abstract class JRFillTextElement extends JRFillElement implements JRTextE
 	@Override
 	protected boolean prepare(
 		int availableHeight,
-		boolean isOverflow
+		boolean isOverflow,
+		boolean isOverflowAllowed
 		) throws JRException
 	{
 		isCutParagraphOverflow = canOverflow() && isCutParagraph;
 		
-		return super.prepare(availableHeight, isOverflow);
+		return super.prepare(availableHeight, isOverflow, isOverflowAllowed);
 	}
 
 

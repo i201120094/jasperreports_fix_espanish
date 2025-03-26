@@ -116,12 +116,15 @@ public class JRFillComponentElement extends JRFillElement implements JRComponent
 	}
 	
 	@Override
-	protected boolean prepare(int availableHeight, boolean isOverflow)
-			throws JRException
+	protected boolean prepare(
+		int availableHeight, 
+		boolean isOverflow,
+		boolean isOverflowAllowed
+		) throws JRException
 	{
 		boolean willOverflow = false;
 
-		super.prepare(availableHeight, isOverflow);
+		super.prepare(availableHeight, isOverflow, isOverflowAllowed);
 		
 		if (!isToPrint())
 		{
@@ -151,7 +154,7 @@ public class JRFillComponentElement extends JRFillElement implements JRComponent
 
 		if (isToPrint)
 		{
-			FillPrepareResult result = fillComponent.prepare(availableHeight - getRelativeY());
+			FillPrepareResult result = fillComponent.prepare(availableHeight - getRelativeY(), isOverflowAllowed);
 			
 			isToPrint = result.isToPrint();
 			willOverflow = result.willOverflow();

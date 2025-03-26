@@ -219,8 +219,15 @@ public class FillSpiderChart extends BaseFillComponent implements JRFillCloneabl
 		return image;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public FillPrepareResult prepare(int availableHeight)
+	{
+		return prepare(availableHeight, true);
+	}
+
+	@Override
+	public FillPrepareResult prepare(int availableHeight, boolean isOverflowAllowed)
 	{
 		return FillPrepareResult.PRINT_NO_STRETCH;
 	}

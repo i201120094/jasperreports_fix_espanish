@@ -982,7 +982,8 @@ public abstract class JRFillElement implements JRElement, JRFillCloneable, JRSty
 	 */
 	protected boolean prepare(
 		int availableHeight,
-		boolean isOverflow
+		boolean isOverflow,
+		boolean isOverflowAllowed
 		) throws JRException
 	{
 		if (

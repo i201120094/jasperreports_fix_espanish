@@ -864,7 +864,8 @@ public class JRFillChart extends JRFillElement implements JRChart
 	@Override
 	protected boolean prepare(
 		int availableHeight,
-		boolean isOverflow
+		boolean isOverflow,
+		boolean isOverflowAllowed
 		)
 	{
 		boolean willOverflow = false;

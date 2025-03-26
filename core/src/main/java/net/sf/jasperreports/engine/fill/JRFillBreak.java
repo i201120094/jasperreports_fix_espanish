@@ -165,10 +165,11 @@ public class JRFillBreak extends JRFillElement implements JRBreak
 	@Override
 	protected boolean prepare(
 		int availableHeight,
-		boolean isOverflow
+		boolean isOverflow,
+		boolean isLoverflowAllowed
 		) throws JRException
 	{
-		super.prepare(availableHeight, isOverflow);
+		super.prepare(availableHeight, isOverflow, isLoverflowAllowed);
 		
 		if (!this.isToPrint())
 		{

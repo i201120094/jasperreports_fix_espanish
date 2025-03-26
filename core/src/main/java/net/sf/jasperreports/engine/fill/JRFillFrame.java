@@ -219,9 +219,13 @@ public class JRFillFrame extends JRFillElement implements JRFrame
 	}
 	
 	@Override
-	protected boolean prepare(int availableHeight, boolean isOverflow) throws JRException
+	protected boolean prepare(
+		int availableHeight, 
+		boolean isOverflow,
+		boolean isOverflowAllowed
+		) throws JRException
 	{
-		super.prepare(availableHeight, isOverflow);
+		super.prepare(availableHeight, isOverflow, isOverflowAllowed);
 
 		if (!isToPrint())
 		{
@@ -267,7 +271,7 @@ public class JRFillFrame extends JRFillElement implements JRFrame
 		frameContainer.initFill();
 		frameContainer.resetElements();
 		
-		frameContainer.prepareElements(availableHeight - getRelativeY() - topPadding - bottomPadding, true);
+		frameContainer.prepareElements(availableHeight - getRelativeY() - topPadding - bottomPadding, isOverflowAllowed);
 		
 		boolean willOverflow = frameContainer.willOverflow();
 		fillTopBorder = first || drawTopBorderOnSplit();

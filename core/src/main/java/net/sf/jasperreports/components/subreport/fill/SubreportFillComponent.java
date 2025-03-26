@@ -159,8 +159,15 @@ public abstract class SubreportFillComponent extends BaseFillComponent
 				);
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public FillPrepareResult prepare(int availableHeight)
+	{
+		return prepare(availableHeight, true);
+	}
+	
+	@Override
+	public FillPrepareResult prepare(int availableHeight, boolean isOverflowAllowed)
 	{
 		try
 		{
@@ -177,7 +184,8 @@ public abstract class SubreportFillComponent extends BaseFillComponent
 			FillPrepareResult result = 
 				fillSubreport.prepareSubreport(
 					availableHeight - verticalPadding, 
-					filling
+					filling,
+					isOverflowAllowed
 					);
 			
 			if (verticalPadding != 0)

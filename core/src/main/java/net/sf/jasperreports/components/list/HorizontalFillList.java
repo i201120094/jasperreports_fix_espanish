@@ -26,6 +26,9 @@ package net.sf.jasperreports.components.list;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRRuntimeException;
 import net.sf.jasperreports.engine.JRStyle;
@@ -33,9 +36,6 @@ import net.sf.jasperreports.engine.component.FillPrepareResult;
 import net.sf.jasperreports.engine.fill.JRFillCloneFactory;
 import net.sf.jasperreports.engine.fill.JRFillCloneable;
 import net.sf.jasperreports.engine.fill.JRFillObjectFactory;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 /**
  * Horizontal fill list component implementation.
@@ -88,8 +88,15 @@ public class HorizontalFillList extends BaseFillList
 		this.contentsList.add(contentsClone);
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public FillPrepareResult prepare(int availableHeight)
+	{
+		return prepare(availableHeight, true);
+	}
+
+	@Override
+	public FillPrepareResult prepare(int availableHeight, boolean isOverflowAllowed)
 	{
 		createPrintFrame();
 		try

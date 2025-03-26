@@ -348,7 +348,8 @@ public abstract class JRFillElementContainer extends JRFillElementGroup implemen
 				currentOverflowWithElements = 
 					element.prepare(
 						availableHeight + getElementFirstY(element),
-						isOverflow
+						isOverflow,
+						isOverflowAllowed
 						) 
 					|| currentOverflowWithElements;
 				

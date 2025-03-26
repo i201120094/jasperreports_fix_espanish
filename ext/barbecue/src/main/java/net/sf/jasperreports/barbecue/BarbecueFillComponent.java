@@ -84,8 +84,15 @@ public class BarbecueFillComponent extends BaseFillComponent
 		return EvaluationTimeEnum.getValueOrDefault(barcodeComponent.getEvaluationTime()) == EvaluationTimeEnum.NOW;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public FillPrepareResult prepare(int availableHeight)
+	{
+		return prepare(availableHeight, true);
+	}
+
+	@Override
+	public FillPrepareResult prepare(int availableHeight, boolean isOverflowAllowed)
 	{
 		//FIXMENOW do like for map and spider chart, because it crashes with null code one evaluationTime != NOW; check barbecue too
 		return isEvaluateNow() && code == null 

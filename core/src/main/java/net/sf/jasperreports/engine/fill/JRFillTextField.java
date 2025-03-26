@@ -644,12 +644,13 @@ public class JRFillTextField extends JRFillTextElement implements JRTextField
 	@Override
 	public boolean prepare(
 		int availableHeight,
-		boolean isOverflow
+		boolean isOverflow,
+		boolean isOverflowAllowed
 		) throws JRException
 	{
 		boolean willOverflow = false;
 
-		super.prepare(availableHeight, isOverflow);
+		super.prepare(availableHeight, isOverflow, isOverflowAllowed);
 
 		if (!isToPrint())
 		{

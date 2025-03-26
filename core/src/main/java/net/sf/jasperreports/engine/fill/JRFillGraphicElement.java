@@ -131,12 +131,13 @@ public abstract class JRFillGraphicElement extends JRFillElement implements JRGr
 	@Override
 	protected boolean prepare(
 		int availableHeight,
-		boolean isOverflow
+		boolean isOverflow,
+		boolean isOverflowAllowed
 		) throws JRException
 	{
 		boolean willOverflow = false;
 
-		super.prepare(availableHeight, isOverflow);
+		super.prepare(availableHeight, isOverflow, isOverflowAllowed);
 		
 		if (!this.isToPrint())
 		{

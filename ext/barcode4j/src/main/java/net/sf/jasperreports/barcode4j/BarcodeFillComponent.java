@@ -83,8 +83,15 @@ public class BarcodeFillComponent extends BaseFillComponent
 		renderable = evaluator.getRenderable();
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Override
 	public FillPrepareResult prepare(int availableHeight)
+	{
+		return prepare(availableHeight, true);
+	}
+
+	@Override
+	public FillPrepareResult prepare(int availableHeight, boolean isOverflowAllowed)
 	{
 		if (isEvaluateNow() && renderable == null)
 		{

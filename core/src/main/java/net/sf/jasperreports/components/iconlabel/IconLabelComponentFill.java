@@ -570,8 +570,15 @@ public class IconLabelComponentFill extends BaseFillComponent implements Stretch
 		iconTextField.setConditionalStylesContainer(conditionalStylesContainer);
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public FillPrepareResult prepare(int availableHeight)
+	{
+		return prepare(availableHeight, true);
+	}
+
+	@Override
+	public FillPrepareResult prepare(int availableHeight, boolean isOverflowAllowed)
 	{
 		float paddingDiff = 
 			iconLabelComponent.getContext().getComponentElement().getWidth()
@@ -634,7 +641,7 @@ public class IconLabelComponentFill extends BaseFillComponent implements Stretch
 		{
 			// in the absence of the real overflow flag, passing true is best,
 			// because on the first prepare attempt, all text is still remaining to be rendered
-			overflow = iconTextField.prepare(textAvailableHeight, true);
+			overflow = iconTextField.prepare(textAvailableHeight, true, isOverflowAllowed);
 		}
 		catch (JRException e)
 		{
@@ -675,7 +682,7 @@ public class IconLabelComponentFill extends BaseFillComponent implements Stretch
 		{
 			// in the absence of the real overflow flag, passing true is best,
 			// because on the first prepare attempt, all text is still remaining to be rendered
-			overflow = labelTextField.prepare(textAvailableHeight, true) || overflow;
+			overflow = labelTextField.prepare(textAvailableHeight, true, isOverflowAllowed) || overflow;
 		}
 		catch (JRException e)
 		{
@@ -705,7 +712,7 @@ public class IconLabelComponentFill extends BaseFillComponent implements Stretch
 					iconTextField.rewind();
 					iconTextField.reset();
 					iconTextField.setWidth(labelAvailableWidth);
-					overflow = iconTextField.prepare(iconAvailableHeight, true) || overflow; // overflow true is the next best thing, when not having the real thing
+					overflow = iconTextField.prepare(iconAvailableHeight, true, isOverflowAllowed) || overflow; // overflow true is the next best thing, when not having the real thing
 					iconsVisible = iconTextField.getStretchHeight() <= iconAvailableHeight;
 					//iconsVisible = iconTextField.getPrintElementHeight() <= iconAvailableHeight;
 				}

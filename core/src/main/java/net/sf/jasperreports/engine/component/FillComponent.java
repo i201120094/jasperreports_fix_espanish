@@ -71,15 +71,24 @@ public interface FillComponent
 	void evaluate(byte evaluation) throws JRException;
 
 	/**
+	 * @deprecated Replaced by {@link #prepare(int, boolean)}.
+	 */
+	FillPrepareResult prepare(int availableHeight);
+
+	/**
 	 * Prepares to fill the component by deciding whether the component will
 	 * print, and how much vertical space it will require.
 	 * 
 	 * @param availableHeight the amount of vertical space available for the
 	 * component, starting from the top of the component element.
+	 * @param isOverflowAllowed flag indicating if overflow is allowed for the component.
 	 * @return the result of the preparation, which specifies whether the
 	 * component will print and how much it will stretch vertically.
 	 */
-	FillPrepareResult prepare(int availableHeight);
+	default FillPrepareResult prepare(int availableHeight, boolean isOverflowAllowed)
+	{
+		return prepare(availableHeight);
+	}
 
 	/**
 	 * Fills the component by creating a print element which will be included

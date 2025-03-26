@@ -610,7 +610,8 @@ public class JRFillImage extends JRFillGraphicElement implements JRImage
 	@Override
 	protected boolean prepare(
 		int availableHeight,
-		boolean isOverflow
+		boolean isOverflow,
+		boolean isOverflowAllowed
 		) throws JRException
 	{
 		boolean willOverflow = false;

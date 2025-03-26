@@ -798,9 +798,13 @@ public class JRFillCrosstab extends JRFillElement implements JRCrosstab, JROrigi
 	}
 
 	@Override
-	protected boolean prepare(int availableHeight, boolean isOverflow) throws JRException
+	protected boolean prepare(
+		int availableHeight, 
+		boolean isOverflow,
+		boolean isOverflowAllowed
+		) throws JRException
 	{
-		super.prepare(availableHeight, isOverflow);
+		super.prepare(availableHeight, isOverflow, isOverflowAllowed);
 
 		if (!isToPrint())
 		{

@@ -185,10 +185,13 @@ public class ComponentFillSubreport extends JRFillSubreport
 		parameterValues.put(JRParameter.REPORT_TEMPLATES, templates);
 	}
 	
-	protected FillPrepareResult prepareSubreport(int availableHeight, boolean isOverflow) 
-		throws JRException
+	protected FillPrepareResult prepareSubreport(
+		int availableHeight, 
+		boolean isOverflow,
+		boolean isOverflowAllowed
+		) throws JRException
 	{
-		boolean willOverflow = prepare(availableHeight, isOverflow);
+		boolean willOverflow = prepare(availableHeight, isOverflow, isOverflowAllowed);
 		FillPrepareResult result;
 		if (printPage == null)
 		{
