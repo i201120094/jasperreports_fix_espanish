@@ -64,7 +64,10 @@ public class JacksonReportLoader implements ReportLoader
 		if (detectedReport)
 		{
 			ByteArrayInputStream dataStream = new ByteArrayInputStream(data);
+			JasperDesign.setThreadJasperReportsContext(context);
 			JasperDesign report = JacksonUtil.getInstance(context).loadXml(dataStream, JasperDesign.class);
+			JasperDesign.removeThreadJasperReportsContext();
+			JasperDesign.removeThreadInstance();
 			return Optional.of(report);
 		}
 		return Optional.empty();

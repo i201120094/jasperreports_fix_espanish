@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
@@ -109,14 +110,10 @@ public class JRDesignTextField extends JRDesignTextElement implements JRTextFiel
 	protected int bookmarkLevel = JRAnchor.NO_BOOKMARK;
 
 
-	/**
-	 *
-	 */
+	@JsonCreator // not actually needed; used for clarity
 	public JRDesignTextField()
 	{
-		super(null);
-		
-		hyperlinkParameters = new ArrayList<>();
+		this(JasperDesign.getThreadInstance());
 	}
 		
 	/**

@@ -23,6 +23,8 @@
  */
 package net.sf.jasperreports.engine.design;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+
 import net.sf.jasperreports.engine.JRBreak;
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRDefaultStyleProvider;
@@ -45,12 +47,10 @@ public class JRDesignBreak extends JRDesignElement implements JRBreak
 
 	protected BreakTypeEnum type;
 
-	/**
-	 *
-	 */
+	@JsonCreator // not actually needed; used for clarity
 	public JRDesignBreak()
 	{
-		super(null);
+		this(JasperDesign.getThreadInstance());
 	}
 		
 	/**

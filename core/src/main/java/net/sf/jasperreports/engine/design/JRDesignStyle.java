@@ -26,6 +26,7 @@ package net.sf.jasperreports.engine.design;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
@@ -61,12 +62,10 @@ public class JRDesignStyle extends JRBaseStyle
 	private List<JRConditionalStyle> conditionalStylesList = new ArrayList<>();
 
 
-	/**
-	 *
-	 */
+	@JsonCreator // not actually needed; used for clarity
 	public JRDesignStyle()
 	{
-		super();
+		this(JasperDesign.getThreadInstance());
 	}
 
 	/**

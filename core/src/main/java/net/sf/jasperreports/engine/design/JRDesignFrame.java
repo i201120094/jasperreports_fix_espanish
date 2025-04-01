@@ -27,6 +27,7 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
 import net.sf.jasperreports.engine.JRChild;
@@ -86,9 +87,10 @@ public class JRDesignFrame extends JRDesignElement implements JRFrame
 	/**
 	 * Creates a new frame object.
 	 */
+	@JsonCreator // not actually needed; used for clarity
 	public JRDesignFrame()
 	{
-		this(null);
+		this(JasperDesign.getThreadInstance());
 	}
 
 	

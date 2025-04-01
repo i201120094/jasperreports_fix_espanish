@@ -131,7 +131,7 @@ public class JRDesignImage extends JRDesignGraphicElement implements JRImage
 	@JsonCreator
 	private JRDesignImage()
 	{
-		this(null);
+		this(JasperDesign.getThreadInstance());
 	}
 		
 

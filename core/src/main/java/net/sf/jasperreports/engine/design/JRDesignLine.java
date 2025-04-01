@@ -23,6 +23,8 @@
  */
 package net.sf.jasperreports.engine.design;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRDefaultStyleProvider;
 import net.sf.jasperreports.engine.JRExpressionCollector;
@@ -49,12 +51,10 @@ public class JRDesignLine extends JRDesignGraphicElement implements JRLine
 	protected LineDirectionEnum direction;
 
 
-	/**
-	 *
-	 */
+	@JsonCreator // not actually needed; used for clarity
 	public JRDesignLine()
 	{
-		super(null);
+		this(JasperDesign.getThreadInstance());
 	}
 		
 	/**

@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
@@ -203,6 +204,9 @@ public class JasperDesign extends JRBaseReport
 
 	public static final String PROPERTY_TOP_MARGIN = "topMargin";
 	
+	private static final ThreadLocal<JasperReportsContext> THREAD_JASPER_REPORTS_CONTEXT_INSTANCE = new ThreadLocal<JasperReportsContext>();
+	private static final ThreadLocal<JasperDesign> THREAD_INSTANCE = new ThreadLocal<JasperDesign>();
+
 	/**
 	 * Report templates.
 	 */
@@ -225,9 +229,15 @@ public class JasperDesign extends JRBaseReport
 	/**
 	 * Constructs a JasperDesign object and fills it with the default variables and parameters.
 	 */
+	@JsonCreator // not actually needed; used for clarity
 	public JasperDesign()
 	{
-		this(DefaultJasperReportsContext.getInstance());
+		this(
+			THREAD_JASPER_REPORTS_CONTEXT_INSTANCE.get() == null
+			? DefaultJasperReportsContext.getInstance()
+			: THREAD_JASPER_REPORTS_CONTEXT_INSTANCE.get()
+			);
+		THREAD_INSTANCE.set(this);
 	}
 
 	public JasperDesign(JasperReportsContext context)
@@ -235,6 +245,39 @@ public class JasperDesign extends JRBaseReport
 		setMainDataset(new JRDesignDataset(context, true));
 		
 		detailSection = new JRDesignSection(new JROrigin(BandTypeEnum.DETAIL));
+	}
+	
+	
+	/**
+	 * 
+	 */
+	public static void setThreadJasperReportsContext(JasperReportsContext jasperReportsContext)
+	{
+		THREAD_JASPER_REPORTS_CONTEXT_INSTANCE.set(jasperReportsContext);
+	}
+
+	/**
+	 * 
+	 */
+	public static void removeThreadJasperReportsContext()
+	{
+		THREAD_JASPER_REPORTS_CONTEXT_INSTANCE.remove();
+	}
+
+	/**
+	 * 
+	 */
+	public static JasperDesign getThreadInstance()
+	{
+		return THREAD_INSTANCE.get();
+	}
+
+	/**
+	 * 
+	 */
+	public static void removeThreadInstance()
+	{
+		THREAD_INSTANCE.remove();
 	}
 
 
@@ -687,12 +730,24 @@ public class JasperDesign extends JRBaseReport
 
 
 	@JsonSetter
-	private void setStyles(List<JRStyle> styles) throws JRException
+	private void setStyles(List<JRDesignStyle> styles) throws JRException
 	{
 		if (styles != null)
 		{
-			for (JRStyle style : styles)
+			for (JRDesignStyle style : styles)
 			{
+				String styleName = style.getStyleNameReference();
+				if (styleName != null)
+				{
+					Map<String,JRStyle> stylesMap = getStylesMap();
+
+					if (stylesMap.containsKey(styleName))
+					{
+						JRStyle parent = stylesMap.get(styleName);
+						style.setParentStyle(parent);
+						style.setParentStyleNameReference(null);
+					}
+				}
 				addStyle(style);
 			}
 		}

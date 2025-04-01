@@ -23,6 +23,11 @@
  */
 package net.sf.jasperreports.engine.design;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+
 import net.sf.jasperreports.engine.JRCloneable;
 import net.sf.jasperreports.engine.JRComponentElement;
 import net.sf.jasperreports.engine.JRConstants;
@@ -34,9 +39,6 @@ import net.sf.jasperreports.engine.component.BaseComponentContext;
 import net.sf.jasperreports.engine.component.Component;
 import net.sf.jasperreports.engine.component.ContextAwareComponent;
 import net.sf.jasperreports.engine.design.events.JRPropertyChangeSupport;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 /**
  * A {@link JRComponentElement} implementation which is to be used at report
@@ -60,9 +62,10 @@ public class JRDesignComponentElement extends JRDesignElement implements JRCompo
 	/**
 	 * Creates an empty component element.
 	 */
+	@JsonCreator // not actually needed; used for clarity
 	public JRDesignComponentElement()
 	{
-		super(null);
+		this(JasperDesign.getThreadInstance());
 	}
 
 	/**

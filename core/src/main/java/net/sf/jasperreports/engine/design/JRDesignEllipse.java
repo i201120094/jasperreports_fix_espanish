@@ -30,7 +30,6 @@ import net.sf.jasperreports.engine.JRDefaultStyleProvider;
 import net.sf.jasperreports.engine.JREllipse;
 import net.sf.jasperreports.engine.JRExpressionCollector;
 import net.sf.jasperreports.engine.JRVisitor;
-import net.sf.jasperreports.jackson.util.ReportDeserializer;
 
 
 /**
@@ -49,7 +48,7 @@ public class JRDesignEllipse extends JRDesignGraphicElement implements JREllipse
 	@JsonCreator
 	private JRDesignEllipse()
 	{
-		this(ReportDeserializer.getDefaultStyleProvider());
+		this(JasperDesign.getThreadInstance());
 	}
 
 	

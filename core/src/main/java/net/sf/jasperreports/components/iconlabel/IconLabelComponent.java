@@ -48,13 +48,13 @@ import net.sf.jasperreports.engine.component.BaseComponentContext;
 import net.sf.jasperreports.engine.component.ComponentContext;
 import net.sf.jasperreports.engine.component.ContextAwareComponent;
 import net.sf.jasperreports.engine.design.JRDesignTextField;
+import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.design.events.JRChangeEventsSupport;
 import net.sf.jasperreports.engine.design.events.JRPropertyChangeSupport;
 import net.sf.jasperreports.engine.type.HorizontalImageAlignEnum;
 import net.sf.jasperreports.engine.type.VerticalImageAlignEnum;
 import net.sf.jasperreports.engine.util.StyleResolver;
 import net.sf.jasperreports.engine.xml.JRXmlConstants;
-import net.sf.jasperreports.jackson.util.ReportDeserializer;
 
 
 /**
@@ -88,7 +88,7 @@ public class IconLabelComponent implements ContextAwareComponent, JRBoxContainer
 	@JsonCreator
 	private IconLabelComponent() 
 	{
-		this(ReportDeserializer.getDefaultStyleProvider());
+		this(JasperDesign.getThreadInstance());
 	}
 	
 	public IconLabelComponent(JRDefaultStyleProvider defaultStyleProvider) 

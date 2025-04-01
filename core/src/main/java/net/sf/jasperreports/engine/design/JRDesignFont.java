@@ -23,12 +23,16 @@
  */
 package net.sf.jasperreports.engine.design;
 
+import java.util.Map;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonSetter;
 
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRStyle;
 import net.sf.jasperreports.engine.JRStyleContainer;
 import net.sf.jasperreports.engine.base.JRBaseFont;
+import net.sf.jasperreports.engine.xml.JRXmlConstants;
 
 
 /**
@@ -50,7 +54,7 @@ public class JRDesignFont extends JRBaseFont
 	@JsonCreator
 	private JRDesignFont()
 	{
-		this(null);
+		this(null); // this causes a style inheritance issue only for design view (mostly in charts), as base and fill factories provide proper style container reference; doesn't worth fixing 
 	}
 
 	
@@ -82,6 +86,30 @@ public class JRDesignFont extends JRBaseFont
 		Object old = this.styleNameReference;
 		this.styleNameReference = styleNameReference;
 		getEventSupport().firePropertyChange(PROPERTY_STYLE_NAME_REFERENCE, old, this.styleNameReference);
+	}
+
+
+	@JsonSetter(JRXmlConstants.ATTRIBUTE_style)
+	private void setStyleName(String styleName)
+	{
+		if (styleName != null)
+		{
+			JasperDesign jasperDesign = JasperDesign.getThreadInstance();
+			if (jasperDesign != null)
+			{
+				Map<String,JRStyle> stylesMap = jasperDesign.getStylesMap();
+
+				if (stylesMap.containsKey(styleName))
+				{
+					JRStyle style = stylesMap.get(styleName);
+					setStyle(style);
+				}
+				else
+				{
+					setStyleNameReference(styleName);
+				}
+			}
+		}
 	}
 
 }

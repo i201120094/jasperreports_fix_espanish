@@ -55,7 +55,6 @@ import net.sf.jasperreports.engine.JRPrintHyperlink;
 import net.sf.jasperreports.engine.JRPrintHyperlinkParameter;
 import net.sf.jasperreports.engine.JRPrintHyperlinkParameters;
 import net.sf.jasperreports.engine.JRPropertiesMap;
-import net.sf.jasperreports.engine.JRReport;
 import net.sf.jasperreports.engine.JRRuntimeException;
 import net.sf.jasperreports.engine.JasperReportsContext;
 import net.sf.jasperreports.engine.component.Component;
@@ -202,22 +201,13 @@ public class JacksonUtil
 		
 		SimpleModule module = new SimpleModule();
 		// these global mappings are here only for implementations that need context or for third-party classes/interfaces
-		module.addDeserializer(JRReport.class, new ReportDeserializer(jasperReportsContext));
 		module.addSerializer(UUID.class, new UuidSerializer(reportWriterConfig.isExcludeUuids()));
 		module.addSerializer(Color.class, new ColorSerializer());
 		module.addDeserializer(Color.class, new ColorDeserializer());
 		module.addSerializer(JRPropertiesMap.class, new PropertiesMapSerializer(reportWriterConfig));
 		// for our own classes and interfaces, we use class level annotations
-//		module.addSerializer(JRExpression.class, new ExpressionSerializer());
-//		module.addDeserializer(JRExpression.class, new ExpressionDeserializer());
-//		module.addSerializer(JRPropertyExpression.class, new PropertyExpressionSerializer());
-//		module.addDeserializer(JRPropertyExpression.class, new PropertyExpressionDeserializer());
-//		module.addSerializer(DatasetPropertyExpression.class, new DatasetPropertyExpressionSerializer());
-//		module.addDeserializer(DatasetPropertyExpression.class, new DatasetPropertyExpressionDeserializer());
 		mapper.registerModule(module);
 		
-//		mapper.registerModule(new DefaultJacksonMapperModule());
-
 		mapper.configure(JsonParser.Feature.ALLOW_SINGLE_QUOTES, true);
 	}
 	

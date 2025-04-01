@@ -23,6 +23,8 @@
  */
 package net.sf.jasperreports.engine.design;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+
 import net.sf.jasperreports.engine.JRConstants;
 import net.sf.jasperreports.engine.JRDefaultStyleProvider;
 import net.sf.jasperreports.engine.JRExpressionCollector;
@@ -50,12 +52,10 @@ public class JRDesignRectangle extends JRDesignGraphicElement implements JRRecta
 	protected Integer radius;
 
 
-	/**
-	 *
-	 */
+	@JsonCreator // not actually needed; used for clarity
 	public JRDesignRectangle()
 	{
-		super(null);
+		this(JasperDesign.getThreadInstance());
 	}
 		
 

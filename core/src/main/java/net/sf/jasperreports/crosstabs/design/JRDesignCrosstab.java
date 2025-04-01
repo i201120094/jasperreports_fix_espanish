@@ -39,6 +39,7 @@ import java.util.TimeZone;
 
 import org.apache.commons.collections4.map.LinkedMap;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
@@ -72,6 +73,7 @@ import net.sf.jasperreports.engine.ReportContext;
 import net.sf.jasperreports.engine.base.JRBaseLineBox;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignVariable;
+import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.type.CalculationEnum;
 import net.sf.jasperreports.engine.type.HorizontalPosition;
 import net.sf.jasperreports.engine.type.ModeEnum;
@@ -246,9 +248,10 @@ public class JRDesignCrosstab extends JRDesignElement implements JRCrosstab
 	/**
 	 * Creates a new crosstab.
 	 */
+	@JsonCreator // not actually needed; used for clarity
 	public JRDesignCrosstab()
 	{
-		this(null);
+		this(JasperDesign.getThreadInstance());
 	}
 	
 	

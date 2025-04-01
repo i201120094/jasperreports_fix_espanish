@@ -56,13 +56,13 @@ import net.sf.jasperreports.engine.JRVisitor;
 import net.sf.jasperreports.engine.base.JRBaseLineBox;
 import net.sf.jasperreports.engine.design.JRDesignElement;
 import net.sf.jasperreports.engine.design.JRDesignHyperlink;
+import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.type.EvaluationTimeEnum;
 import net.sf.jasperreports.engine.type.HyperlinkTargetEnum;
 import net.sf.jasperreports.engine.type.HyperlinkTypeEnum;
 import net.sf.jasperreports.engine.type.ModeEnum;
 import net.sf.jasperreports.engine.util.JRCloneUtils;
 import net.sf.jasperreports.engine.xml.JRXmlConstants;
-import net.sf.jasperreports.jackson.util.ReportDeserializer;
 
 
 /**
@@ -171,7 +171,7 @@ public class JRDesignChart extends JRDesignElement implements JRChart
 	@JsonCreator
 	private JRDesignChart(@JsonProperty("chartType") ChartTypeEnum chartType)
 	{
-		this(ReportDeserializer.getDefaultStyleProvider(), chartType);
+		this(JasperDesign.getThreadInstance(), chartType);
 	}
 
 	/**

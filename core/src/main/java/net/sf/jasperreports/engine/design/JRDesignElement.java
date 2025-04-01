@@ -28,6 +28,7 @@ import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
@@ -171,12 +172,34 @@ public abstract class JRDesignElement extends JRBaseElement
 	 * @param styleName the name of the external style
 	 * @see #getStyleNameReference()
 	 */
-	@JsonSetter(JRXmlConstants.ATTRIBUTE_style)
 	public void setStyleNameReference(String styleName)
 	{
 		Object old = this.parentStyleNameReference;
 		this.parentStyleNameReference = styleName;
 		getEventSupport().firePropertyChange(PROPERTY_PARENT_STYLE_NAME_REFERENCE, old, this.parentStyleNameReference);
+	}
+
+	@JsonSetter(JRXmlConstants.ATTRIBUTE_style)
+	private void setStyleName(String styleName)
+	{
+		if (styleName != null)
+		{
+			JasperDesign jasperDesign = JasperDesign.getThreadInstance();
+			if (jasperDesign != null)
+			{
+				Map<String,JRStyle> stylesMap = jasperDesign.getStylesMap();
+
+				if (stylesMap.containsKey(styleName))
+				{
+					JRStyle style = stylesMap.get(styleName);
+					setStyle(style);
+				}
+				else
+				{
+					setStyleNameReference(styleName);
+				}
+			}
+		}
 	}
 
 	/**
