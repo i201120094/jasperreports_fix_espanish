@@ -63,11 +63,18 @@ public class JacksonReportLoader implements ReportLoader
 		boolean detectedReport = detectReportXML(data);
 		if (detectedReport)
 		{
-			ByteArrayInputStream dataStream = new ByteArrayInputStream(data);
+			JasperDesign report = null;
+ 			ByteArrayInputStream dataStream = new ByteArrayInputStream(data);
 			JasperDesign.setThreadJasperReportsContext(context);
-			JasperDesign report = JacksonUtil.getInstance(context).loadXml(dataStream, JasperDesign.class);
-			JasperDesign.removeThreadJasperReportsContext();
-			JasperDesign.removeThreadInstance();
+			try
+			{
+				report = JacksonUtil.getInstance(context).loadXml(dataStream, JasperDesign.class);
+			}
+			finally
+			{
+				JasperDesign.removeThreadJasperReportsContext();
+				JasperDesign.removeThreadInstance();
+			}
 			return Optional.of(report);
 		}
 		return Optional.empty();
