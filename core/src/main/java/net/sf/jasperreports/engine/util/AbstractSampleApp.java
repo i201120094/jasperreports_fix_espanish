@@ -140,14 +140,12 @@ public abstract class AbstractSampleApp
 			String user = "sa";
 			String password = "";
 
-
 			Class.forName(driver);
 			conn = DriverManager.getConnection(connectString, user, password);
 		}
 		catch (ClassNotFoundException | SQLException e)
 		{
 			throw new JRException(e);
-			
 		}
 
 		return conn;
