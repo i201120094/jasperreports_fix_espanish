@@ -3897,6 +3897,19 @@ The property itself defaults to <code>false</code> (for backward compatibility r
   </configProperty>
   
   
+  <!-- net.sf.jasperreports.export.docx.background.as.header -->
+  
+  <configProperty name="net.sf.jasperreports.export.docx.background.as.header">
+    <description>
+This property specifies whether the report's background section elements should be placed inside the DOCX header section, usually to achieve a watermark effect.
+<br/>
+It serves as default value for the 
+<api href="net/sf/jasperreports/export/DocxReportConfiguration.html#isBackgroundAsHeader()">isBackgroundAsHeader()</api> DOCX export configuration setting.
+The property itself defaults to <code>false</code>.
+    </description>
+  </configProperty>
+  
+  
   <!-- net.sf.jasperreports.export.flash.element.allow.script.access -->
   
   <configProperty name="net.sf.jasperreports.export.flash.element.allow.script.access">
@@ -7689,6 +7702,15 @@ Property that determines whether design element UUIDs are included in the HTML e
 Its value is used as default for the
 <api href="net/sf/jasperreports/export/HtmlReportConfiguration.html#isIncludeElementUUID()">HtmlReportConfiguration.isIncludeElementUUID()</api> HTML export configuration setting.
 It only applies to text elements with numeric values.
+    </description>
+  </configProperty>
+
+
+  <!-- net.sf.jasperreports.svg.allow.external.resources -->
+
+  <configProperty name="net.sf.jasperreports.svg.allow.external.resources">
+    <description>
+Property that determines whether external resources in SVG images are allowed and loaded.
     </description>
   </configProperty>
 

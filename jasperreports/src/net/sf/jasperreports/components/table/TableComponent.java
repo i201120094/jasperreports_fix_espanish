@@ -73,7 +73,7 @@ public interface TableComponent extends Component, JRCloneable, JRVisitable, Dat
 	 */
 	@Property(
 			category = PropertyConstants.CATEGORY_TABLE,
-			defaultValue = "false",
+			defaultValue = "true",
 			scopes = {PropertyScope.CONTEXT, PropertyScope.REPORT},
 			sinceVersion = PropertyConstants.VERSION_6_21_5,
 			valueType = Boolean.class

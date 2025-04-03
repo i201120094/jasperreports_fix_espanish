@@ -292,7 +292,7 @@ public abstract class ExcelAbstractExporter<RC extends XlsReportConfiguration, C
 	@Property(
 			category = PropertyConstants.CATEGORY_EXPORT,
 			scopes = {PropertyScope.CONTEXT},
-			sinceVersion = PropertyConstants.VERSION_6_21_5,
+			sinceVersion = PropertyConstants.VERSION_6_21_4,
 			valueType = Float.class
 			)
 	public static final String PROPERTY_AVERAGE_CHAR_WIDTH_FACTOR = XLS_EXPORTER_PROPERTIES_PREFIX + "average.char.width.factor";
