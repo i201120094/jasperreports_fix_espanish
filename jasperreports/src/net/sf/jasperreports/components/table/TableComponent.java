@@ -63,7 +63,7 @@ public interface TableComponent extends Component, JRCloneable, JRVisitable, Dat
 			category = PropertyConstants.CATEGORY_TABLE,
 			defaultValue = "Left",
 			scopes = {PropertyScope.CONTEXT, PropertyScope.REPORT},
-			sinceVersion = PropertyConstants.VERSION_7_0_2,
+			sinceVersion = PropertyConstants.VERSION_6_21_5,
 			valueType = HorizontalPosition.class
 			)
 	public static final String CONFIG_PROPERTY_HORIZONTAL_POSITION = JRPropertiesUtil.PROPERTY_PREFIX + "components.table.horizontal.position";
@@ -75,7 +75,7 @@ public interface TableComponent extends Component, JRCloneable, JRVisitable, Dat
 			category = PropertyConstants.CATEGORY_TABLE,
 			defaultValue = "false",
 			scopes = {PropertyScope.CONTEXT, PropertyScope.REPORT},
-			sinceVersion = PropertyConstants.VERSION_7_0_2,
+			sinceVersion = PropertyConstants.VERSION_6_21_5,
 			valueType = Boolean.class
 			)
 	public static final String CONFIG_PROPERTY_SHRINK_WIDTH = JRPropertiesUtil.PROPERTY_PREFIX + "components.table.shrink.width";
@@ -86,7 +86,7 @@ public interface TableComponent extends Component, JRCloneable, JRVisitable, Dat
 	@Property(
 			category = PropertyConstants.CATEGORY_TABLE,
 			scopes = {PropertyScope.CONTEXT, PropertyScope.REPORT, PropertyScope.TABLE},
-			sinceVersion = PropertyConstants.VERSION_7_0_2,
+			sinceVersion = PropertyConstants.VERSION_6_21_5,
 			valueType = Integer.class
 			)
 	public static final String CONFIG_PROPERTY_COLUMN_WEIGHT = JRPropertiesUtil.PROPERTY_PREFIX + "components.table.column.weight";

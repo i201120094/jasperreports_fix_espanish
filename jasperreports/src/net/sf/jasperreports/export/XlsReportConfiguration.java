@@ -395,7 +395,7 @@ public interface XlsReportConfiguration extends ReportExportConfiguration
 			name = "net.sf.jasperreports.export.xls.single.sheet.name",
 			category = PropertyConstants.CATEGORY_EXPORT,
 			scopes = {PropertyScope.REPORT},
-			sinceVersion = PropertyConstants.VERSION_7_0_2
+			sinceVersion = PropertyConstants.VERSION_6_21_5
 			)
 	public static final String PROPERTY_SINGLE_SHEET_NAME = JRPropertiesUtil.PROPERTY_PREFIX + "export.xls.single.sheet.name";
 
