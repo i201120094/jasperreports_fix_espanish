@@ -152,9 +152,12 @@ public class DocxTableHelper extends BaseHelper
 		write("     <w:tcPr>\n");
 		if (frameIndex != null)
 		{
+			// starting with MS Office 2409, column width needed to be specified, but only for nested tables;
+			// this also avoids the complicated case of the first column of the top level table which has its width
+			// take into account the page margin
 			write("      <w:tcW w:w=\"" + LengthUtil.twip(gridCell.getWidth()) +"\" w:type=\"dxa\"/>\n");
 		}
- 		if (emptyCellColSpan > 1)
+		if (emptyCellColSpan > 1)
 		{
 			write("      <w:gridSpan w:val=\"" + emptyCellColSpan +"\" />\n");
 		}
@@ -179,7 +182,7 @@ public class DocxTableHelper extends BaseHelper
 		{
 			write("      <w:tcW w:w=\"" + LengthUtil.twip(gridCell.getWidth()) +"\" w:type=\"dxa\"/>\n");
 		}
- 		if (gridCell.getColSpan() > 1)
+		if (gridCell.getColSpan() > 1)
 		{
 			write("      <w:gridSpan w:val=\"" + gridCell.getColSpan() +"\" />\n");
 		}

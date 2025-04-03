@@ -522,7 +522,8 @@ public abstract class JRXlsAbstractExporter<RC extends XlsReportConfiguration, C
 						checkInterrupted();
 						JRPrintPage page = pages.get(pageIndex);
 						pageFormat = jasperPrint.getPageFormat(pageIndex);
-						startRow = exportPage(page, xCuts, startRow, jasperPrint.getName());//FIXMEPART
+						String singleSheetName = configuration.getSingleSheetName();
+						startRow = exportPage(page, xCuts, startRow, singleSheetName == null ? jasperPrint.getName() : singleSheetName);//FIXMEPART
  						pageExported = true;
 					}
 					//updateColumns(xCuts);
@@ -1127,7 +1128,8 @@ public abstract class JRXlsAbstractExporter<RC extends XlsReportConfiguration, C
 	protected void exportEmptyReport() throws JRException, IOException 
 	{
 		pageFormat = jasperPrint.getPageFormat();
-		exportPage(new JRBasePrintPage(), null, 0, jasperPrint.getName());
+		String singleSheetName = getCurrentItemConfiguration().getSingleSheetName();
+		exportPage(new JRBasePrintPage(), null, 0, singleSheetName == null ? jasperPrint.getName() : singleSheetName);
 	}
 	
 	//abstract methods
