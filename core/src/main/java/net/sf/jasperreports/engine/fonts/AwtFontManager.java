@@ -38,8 +38,12 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import net.sf.jasperreports.annotations.properties.Property;
+import net.sf.jasperreports.annotations.properties.PropertyScope;
 import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRPropertiesUtil;
 import net.sf.jasperreports.engine.JasperReportsContext;
+import net.sf.jasperreports.properties.PropertyConstants;
 import net.sf.jasperreports.repo.RepositoryUtil;
 
 /**
@@ -47,6 +51,16 @@ import net.sf.jasperreports.repo.RepositoryUtil;
  */
 public class AwtFontManager
 {
+
+	@Property(
+			category = PropertyConstants.CATEGORY_OTHER,
+			defaultValue = "false",
+			scopes = {PropertyScope.CONTEXT},
+			sinceVersion = PropertyConstants.VERSION_7_0_3,
+			valueType = Boolean.class
+			)
+	public static final String PROPERTY_USE_OWN_TEMP_FILE = JRPropertiesUtil.PROPERTY_PREFIX
+			+ "font.use.own.temp.file";
 	
 	private static final Log log = LogFactory.getLog(AwtFontManager.class);
 
@@ -68,6 +82,9 @@ public class AwtFontManager
 	
 	public Font getAwtFont(JasperReportsContext jasperReportsContext, String ttfLocation)
 	{
+		boolean useOwnFile = JRPropertiesUtil.getInstance(jasperReportsContext).getBooleanProperty(
+				PROPERTY_USE_OWN_TEMP_FILE, false);
+		
 		purgeFontFiles();
 		
 		InputStream is = null;
@@ -76,20 +93,33 @@ public class AwtFontManager
 		{
 			is = RepositoryUtil.getInstance(jasperReportsContext).getInputStreamFromLocation(ttfLocation);
 			
-			fontFile = Files.createTempFile("jr-font", ".ttf");
-			fontFile.toFile().deleteOnExit();
-			
-			if (log.isDebugEnabled())
+			Font font;
+			if (useOwnFile)
 			{
-				log.debug("created font file " + fontFile + " for " + ttfLocation);
+				fontFile = Files.createTempFile("jr-font", ".ttf");
+				fontFile.toFile().deleteOnExit();
+				
+				if (log.isDebugEnabled())
+				{
+					log.debug("created font file " + fontFile + " for " + ttfLocation);
+				}
+				
+				Files.copy(is, fontFile, StandardCopyOption.REPLACE_EXISTING);
+				
+				font = Font.createFont(Font.TRUETYPE_FONT, fontFile.toFile());
+				
+				FontFileReference fontFileReference = new FontFileReference(font, fontFilesQueue, fontFile);
+				fontFileReferences.put(fontFileReference, Boolean.TRUE);
 			}
-			
-			Files.copy(is, fontFile, StandardCopyOption.REPLACE_EXISTING);
-			
-			Font font = Font.createFont(Font.TRUETYPE_FONT, fontFile.toFile());
-			
-			FontFileReference fontFileReference = new FontFileReference(font, fontFilesQueue, fontFile);
-			fontFileReferences.put(fontFileReference, Boolean.TRUE);
+			else
+			{
+				if (log.isDebugEnabled())
+				{
+					log.debug("created font for " + ttfLocation);
+				}
+
+				font = Font.createFont(Font.TRUETYPE_FONT, is);
+			}
 			
 			return font;
 		}

@@ -5974,4 +5974,21 @@ Property that determines whether external resources in SVG images are allowed an
   </configProperty>
 
 
+  <!-- net.sf.jasperreports.font.use.own.temp.file -->
+
+  <configProperty name="net.sf.jasperreports.font.use.own.temp.file">
+    <description>
+Property that determines whether fonts from extensions are created using temporary files managed by
+JasperReports or by Java/AWT.
+<br/>
+When the property is set to <code>true</code>, JasperReports creates temporary files named <code>jr-font*</code>
+for fonts from extensions.
+With this option there are cases in which the temporary files cannot be removed because Java/AWT keeps them open.
+<br/>
+When the property is set to <code>false</code> (which is the default), Java/AWT creates and manages it own
+temporary font files, usually named <code>+~JF*</code>.
+    </description>
+  </configProperty>
+
+
 </configReference>
