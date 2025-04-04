@@ -271,5 +271,7 @@ public interface PropertyConstants
 	String VERSION_7_0_1 = "7.0.1";
 	
 	String VERSION_7_0_2 = "7.0.2";
+	
+	String VERSION_7_0_3 = "7.0.3";
 
 }
