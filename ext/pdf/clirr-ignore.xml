@@ -1,19 +1,2 @@
 <differences>
-	<difference>
-		<className>net/sf/jasperreports/pdf/components/iconlabel/IconLabelElementPdfHandler</className>
-		<differenceType>7009</differenceType>
-		<method>*IconLabelElementPdfHandler()</method>
-	</difference>
-	<difference>
-		<className>net/sf/jasperreports/pdf/JRPdfExporter</className>
-		<differenceType>7006</differenceType>
-		<method>*setHyperlinkInfo(net.sf.jasperreports.pdf.common.PdfChunk, net.sf.jasperreports.engine.JRPrintHyperlink)</method>
-		<to>boolean</to>
-	</difference>
-	<difference>
-		<className>net/sf/jasperreports/pdf/JRPdfExporter</className>
-		<differenceType>7006</differenceType>
-		<method>*setReferenceHyperlink(net.sf.jasperreports.pdf.common.PdfChunk, net.sf.jasperreports.engine.JRPrintHyperlink, java.lang.String)</method>
-		<to>boolean</to>
-	</difference>
 </differences>
