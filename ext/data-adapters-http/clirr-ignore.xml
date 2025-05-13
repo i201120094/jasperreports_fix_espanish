@@ -1,17 +1,2 @@
 <differences>
-	<difference>
-		<className>net/sf/jasperreports/dataadapters/http/*</className>
-		<differenceType>8001</differenceType>
-	</difference>
-	<difference>
-		<className>net/sf/jasperreports/dataadapters/http/HttpDataLocation</className>
-		<differenceType>4001</differenceType>
-		<to>net/sf/jasperreports/dataadapters/DataFile</to>
-	</difference>
-	<difference>
-		<className>net/sf/jasperreports/dataadapters/http/HttpDataFileServiceFactory</className>
-		<differenceType>7005</differenceType>
-		<method>*</method>
-		<to>*</to>
-	</difference>
 </differences>

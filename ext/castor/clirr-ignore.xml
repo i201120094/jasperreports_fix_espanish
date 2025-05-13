@@ -1,14 +1,2 @@
 <differences>
-	<difference>
-		<className>net/sf/jasperreports/data/**/*</className>
-		<differenceType>8001</differenceType>
-	</difference>
-	<difference>
-		<className>net/sf/jasperreports/repo/*</className>
-		<differenceType>8001</differenceType>
-	</difference>
-	<difference>
-		<className>net/sf/jasperreports/util/*</className>
-		<differenceType>8001</differenceType>
-	</difference>
 </differences>
