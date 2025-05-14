@@ -130,7 +130,7 @@ public class ClassicPdfProducer implements PdfProducer
 			category = PropertyConstants.CATEGORY_EXPORT,
 			defaultValue = PropertyConstants.BOOLEAN_FALSE,
 			scopes = {PropertyScope.CONTEXT, PropertyScope.REPORT, PropertyScope.TEXT_ELEMENT},
-			sinceVersion = PropertyConstants.VERSION_7_0_3,
+			sinceVersion = PropertyConstants.VERSION_6_21_5,
 			valueType = Boolean.class
 			)
 	public static final String PROPERTY_USE_SAVED_LINE_BREAKS = JRPropertiesUtil.PROPERTY_PREFIX 
