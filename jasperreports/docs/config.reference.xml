@@ -2387,6 +2387,9 @@ measurement at fill time.
 <br/>
 Currently, the HTML exporter will make use of the saved line break
 positions by introducing explicit line breaks.
+The PDF exporter will use the saved line break position if the
+<code>net.sf.jasperreports.export.pdf.use.saved.line.breaks</code> property
+is set to <code>true</code>.
     </description>
   </configProperty>
 
@@ -7702,6 +7705,18 @@ Property that determines whether design element UUIDs are included in the HTML e
 Its value is used as default for the
 <api href="net/sf/jasperreports/export/HtmlReportConfiguration.html#isIncludeElementUUID()">HtmlReportConfiguration.isIncludeElementUUID()</api> HTML export configuration setting.
 It only applies to text elements with numeric values.
+    </description>
+  </configProperty>
+  
+  
+  <!-- net.sf.jasperreports.export.pdf.use.saved.line.breaks -->
+
+  <configProperty name="net.sf.jasperreports.export.pdf.use.saved.line.breaks">
+    <description>
+Property that determines whether the PDF exporter should make use of the text line break positions saved during the report fill.
+The property is only effective when the <code>net.sf.jasperreports.text.save.line.breaks</code> flag is set.
+<br/>
+The property assumes that the same font is used during report fill and for PDF exporting, therefore using font extensions for texts is recommended.
     </description>
   </configProperty>
 
