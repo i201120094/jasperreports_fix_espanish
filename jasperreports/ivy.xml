@@ -15,11 +15,11 @@
 		<dependency org="com.adobe.xmp" name="xmpcore" rev="6.1.11"/>
 		<dependency org="com.beust" name="jcommander" rev="1.78" conf="test->*"/>
 		<dependency org="com.drewnoakes" name="metadata-extractor" rev="2.18.0" conf="compile->*"/>
-		<dependency org="com.fasterxml.jackson.core" name="jackson-annotations" rev="2.15.3" conf="compile,annotations->*"/>
-		<dependency org="com.fasterxml.jackson.core" name="jackson-core" rev="2.15.3" conf="compile,annotations->*"/>
-		<dependency org="com.fasterxml.jackson.core" name="jackson-databind" rev="2.15.3" conf="compile,annotations->*"/>
-		<dependency org="com.fasterxml.jackson.dataformat" name="jackson-dataformat-xml" rev="2.15.3" conf="compile->*"/>
-		<dependency org="com.fasterxml.jackson.module" name="jackson-module-jaxb-annotations" rev="2.15.3" conf="test->*"/>
+		<dependency org="com.fasterxml.jackson.core" name="jackson-annotations" rev="2.17.1" conf="compile,annotations->*"/>
+		<dependency org="com.fasterxml.jackson.core" name="jackson-core" rev="2.17.1" conf="compile,annotations->*"/>
+		<dependency org="com.fasterxml.jackson.core" name="jackson-databind" rev="2.17.1" conf="compile,annotations->*"/>
+		<dependency org="com.fasterxml.jackson.dataformat" name="jackson-dataformat-xml" rev="2.17.1" conf="compile->*"/>
+		<dependency org="com.fasterxml.jackson.module" name="jackson-module-jaxb-annotations" rev="2.17.1" conf="test->*"/>
 		<dependency org="com.fasterxml.woodstox" name="woodstox-core" rev="6.4.0" conf="test->*"/>
 		<dependency org="com.github.kklisura.cdt" name="cdt-java-client" rev="4.0.0"/>
 		<dependency org="com.google.zxing" name="core" rev="3.4.0"/>
@@ -29,7 +29,7 @@
 		<dependency org="commons-codec" name="commons-codec" rev="1.15" conf="test->*"/>
 		<dependency org="commons-collections" name="commons-collections" rev="3.2.2"/>
 		<dependency org="commons-digester" name="commons-digester" rev="2.1"/>
-		<dependency org="commons-io" name="commons-io" rev="2.15.1" conf="test->*"/>
+		<dependency org="commons-io" name="commons-io" rev="2.16.1" conf="test->*"/>
 		<dependency org="commons-lang" name="commons-lang" rev="2.6" conf="test->*"/>
 		<dependency org="commons-logging" name="commons-logging" rev="1.1.1"/>
 		<dependency org="com.ibm.icu" name="icu4j" rev="70.1"/>
@@ -40,8 +40,8 @@
 		<dependency org="jaxen" name="jaxen" rev="1.2.0"/>
 		<dependency org="mondrian" name="mondrian" rev="3.1.1.12687"/>
 		<dependency org="net.sf.barcode4j" name="barcode4j" rev="2.1"/>
-		<dependency org="net.sf.jasperreports" name="jasperreports-annotation-processors" rev="master-SNAPSHOT" conf="annotations->*"/>
-		<dependency org="net.sf.jasperreports" name="jasperreports-metadata" rev="master-SNAPSHOT" conf="compile,annotations->*"/>
+		<dependency org="net.sf.jasperreports" name="jasperreports-annotation-processors" rev="6.21.4" conf="annotations->*"/>
+		<dependency org="net.sf.jasperreports" name="jasperreports-metadata" rev="6.21.4" conf="compile,annotations->*"/>
 		<dependency org="net.sourceforge.barbecue" name="barbecue" rev="1.5-beta1"/>
 		<dependency org="net.tascalate" name="net.tascalate.asmx" rev="9.3.0" conf="javaflow->*"/>
 		<dependency org="net.tascalate" name="net.tascalate.asmx.analysis" rev="9.3.0" conf="javaflow->*"/>
@@ -67,9 +67,9 @@
 		<dependency org="org.apache.lucene" name="lucene-analyzers-common" rev="8.11.2"/>
 		<dependency org="org.apache.lucene" name="lucene-core" rev="8.11.2"/>
 		<dependency org="org.apache.lucene" name="lucene-queryparser" rev="8.11.2"/>
-		<dependency org="org.apache.poi" name="poi-ooxml" rev="5.2.2"/>
-		<dependency org="org.apache.poi" name="poi" rev="5.2.2"/>
-		<dependency org="org.apache.velocity" name="velocity-engine-core" rev="2.3"/>
+		<dependency org="org.apache.poi" name="poi-ooxml" rev="5.3.0"/>
+		<dependency org="org.apache.poi" name="poi" rev="5.3.0"/>
+		<dependency org="org.apache.velocity" name="velocity-engine-core" rev="2.4"/>
 		<dependency org="org.apache.xmlgraphics" name="batik-anim" rev="1.17"/>
 		<dependency org="org.apache.xmlgraphics" name="batik-awt-util" rev="1.17"/>
 		<dependency org="org.apache.xmlgraphics" name="batik-bridge" rev="1.17"/>
