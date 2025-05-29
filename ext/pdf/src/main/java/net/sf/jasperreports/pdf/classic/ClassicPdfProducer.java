@@ -65,6 +65,7 @@ import net.sf.jasperreports.engine.type.OrientationEnum;
 import net.sf.jasperreports.engine.util.JRStyledText;
 import net.sf.jasperreports.engine.util.NullOutputStream;
 import net.sf.jasperreports.pdf.AbstractPdfTextRenderer;
+import net.sf.jasperreports.pdf.LineBreaksPdfTextRenderer;
 import net.sf.jasperreports.pdf.PdfTextRenderer;
 import net.sf.jasperreports.pdf.SimplePdfTextRenderer;
 import net.sf.jasperreports.pdf.common.PdfChunk;
@@ -123,6 +124,16 @@ public class ClassicPdfProducer implements PdfProducer
 			)
 	public static final String PROPERTY_DOCUMENT_LANGUAGE = JRPropertiesUtil.PROPERTY_PREFIX + "export.pdf.classic.document.language";
 	
+	@Property(
+			category = PropertyConstants.CATEGORY_EXPORT,
+			defaultValue = PropertyConstants.BOOLEAN_FALSE,
+			scopes = {PropertyScope.CONTEXT, PropertyScope.REPORT, PropertyScope.TEXT_ELEMENT},
+			sinceVersion = PropertyConstants.VERSION_7_0_4,
+			valueType = Boolean.class
+			)
+	public static final String PROPERTY_USE_SAVED_LINE_BREAKS = JRPropertiesUtil.PROPERTY_PREFIX 
+			+ "export.pdf.use.saved.line.breaks";
+	
 	private PdfProducerContext context;
 	
 	private ClassicPdfStructure pdfStructure;
@@ -140,6 +151,8 @@ public class ClassicPdfProducer implements PdfProducer
 	
 	private Map<String, RadioCheckField> radioFieldFactories;
 	private Map<String, PdfFormField> radioGroups;
+	
+	private boolean defaultUseSavedLineBreaks;
 
 	public ClassicPdfProducer(PdfProducerContext context)
 	{
@@ -253,6 +266,10 @@ public class ClassicPdfProducer implements PdfProducer
 	public void initReport()
 	{
 		glyphRendering.initGlyphRenderer();
+		
+		defaultUseSavedLineBreaks = context.getProperties().getBooleanProperty(
+				context.getCurrentJasperPrint(), 
+				PROPERTY_USE_SAVED_LINE_BREAKS, false);
 	}
 
 	@Override
@@ -323,14 +340,44 @@ public class ClassicPdfProducer implements PdfProducer
 			}
 			else
 			{
-				textRenderer = 
-					new SimplePdfTextRenderer(
-						context.getJasperReportsContext(), 
-						textContext
-						);//FIXMETAB optimize this
+				boolean useSavedLineBreaks = toUseSavedLineBreaks(textContext);
+				if (useSavedLineBreaks)
+				{
+					textRenderer = new LineBreaksPdfTextRenderer(
+							context.getJasperReportsContext(), textContext);
+				}
+				else
+				{
+					textRenderer = 
+							new SimplePdfTextRenderer(
+								context.getJasperReportsContext(), 
+								textContext
+								);//FIXMETAB optimize this
+				}
 			}
 		}
 		return textRenderer;
+	}
+
+	protected boolean toUseSavedLineBreaks(PdfTextRendererContext textContext)
+	{
+		JRPrintText printText = textContext.getPrintText();
+		boolean useSavedLineBreaks = false;
+		if (printText.getLineBreakOffsets() != null
+				&& printText.getLineBreakOffsets().length > 0)
+		{
+			useSavedLineBreaks = defaultUseSavedLineBreaks;
+			if (printText.hasProperties())
+			{
+				String useSavedLineBreaksProperty = JRPropertiesUtil.getOwnProperty(printText, 
+						PROPERTY_USE_SAVED_LINE_BREAKS);
+				if (useSavedLineBreaksProperty != null)
+				{
+					useSavedLineBreaks = JRPropertiesUtil.asBoolean(useSavedLineBreaksProperty);
+				}
+			}
+		}
+		return useSavedLineBreaks;
 	}
 
 	/**

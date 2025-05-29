@@ -2289,13 +2289,22 @@ public class JRPdfExporter extends JRAbstractExporter<PdfReportConfiguration, Pd
 	protected void getPhrase(AttributedString as, String text, JRPrintText textElement,
 			PdfPhrase phrase)
 	{
-		int runLimit = 0;
+		getPhrase(as, 0, text.length(), text, textElement, phrase);
+	}
 
-		AttributedCharacterIterator iterator = as.getIterator();
+	/**
+	 *
+	 */
+	protected void getPhrase(AttributedString as, int beginIndex, int endIndex, String text, JRPrintText textElement,
+			PdfPhrase phrase)
+	{
+		int runLimit = beginIndex;
+
+		AttributedCharacterIterator iterator = as.getIterator(null, beginIndex, endIndex);
 		Locale locale = getTextLocale(textElement);
 		 
 		boolean firstChunk = true; //FIXMENOW will have multiple anchors in case multiple paragraphs in same text element?
-		while (runLimit < text.length() && (runLimit = iterator.getRunLimit()) <= text.length())
+		while (runLimit < endIndex && (runLimit = iterator.getRunLimit()) <= endIndex)
 		{
 			Map<Attribute,Object> attributes = iterator.getAttributes();
 			PdfTextChunk chunk = getChunk(attributes, text.substring(iterator.getIndex(), runLimit), locale);
