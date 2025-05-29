@@ -595,6 +595,8 @@ public class JRPdfExporter extends JRAbstractExporter<PdfReportConfiguration, Pd
 
 	private BookmarkStack bookmarkStack;
 
+	private int crtPageOffsetX;
+	private int crtPageOffsetY;
 	private int crtOddPageOffsetX;
 	private int crtOddPageOffsetY;
 	private int crtEvenPageOffsetX;
@@ -1124,6 +1126,9 @@ public class JRPdfExporter extends JRAbstractExporter<PdfReportConfiguration, Pd
 
 						pageFormat = jasperPrint.getPageFormat(pageIndex);
 						
+						crtPageOffsetX = 0;
+						crtPageOffsetY = 0;
+						
 						if (sizePageToContent || oldPageFormat != pageFormat)
 						{
 							setPageSize(sizePageToContent ? page : null);
@@ -1213,6 +1218,8 @@ public class JRPdfExporter extends JRAbstractExporter<PdfReportConfiguration, Pd
 	 */
 	protected void setPageSize(JRPrintPage page) throws JRException, IOException
 	{
+		int minX = pageFormat.getLeftMargin();
+		int minY = pageFormat.getTopMargin();
 		int pageWidth = 0; 
 		int pageHeight = 0;
 
@@ -1223,6 +1230,8 @@ public class JRPdfExporter extends JRAbstractExporter<PdfReportConfiguration, Pd
 			{
 				int elementRight = element.getX() + element.getWidth();
 				int elementBottom = element.getY() + element.getHeight();
+				minX = minX < element.getX() ? minX : element.getX();
+				minY = minY < element.getY() ? minY : element.getY();
 				pageWidth = pageWidth < elementRight ? elementRight : pageWidth;
 				pageHeight = pageHeight < elementBottom ? elementBottom : pageHeight;
 			}
@@ -1231,6 +1240,10 @@ public class JRPdfExporter extends JRAbstractExporter<PdfReportConfiguration, Pd
 			pageHeight += pageFormat.getBottomMargin();
 		}
 		
+		crtPageOffsetX = minX < pageFormat.getLeftMargin() ? pageFormat.getLeftMargin() - minX : 0;
+		crtPageOffsetY = minY < pageFormat.getTopMargin() ? pageFormat.getTopMargin() - minY : 0;
+		pageWidth += crtPageOffsetX;
+		pageHeight += crtPageOffsetY;
 		pageWidth = pageWidth < pageFormat.getPageWidth() ? pageFormat.getPageWidth() : pageWidth; 
 		pageHeight = pageHeight < pageFormat.getPageHeight() ? pageFormat.getPageHeight() : pageHeight; 
 		
@@ -3485,9 +3498,12 @@ public class JRPdfExporter extends JRAbstractExporter<PdfReportConfiguration, Pd
 	{
 		return 
 			super.getOffsetX() 
-			+ (insideFrame() ? 0 : (crtDocumentPageNumber % 2 == 0 
-				? crtEvenPageOffsetX 
-				: crtOddPageOffsetX));
+			+ (insideFrame() 
+				? 0 
+				: (crtPageOffsetX 
+					+ (crtDocumentPageNumber % 2 == 0 
+						? crtEvenPageOffsetX 
+						: crtOddPageOffsetX)));
 	}
 
 
@@ -3496,9 +3512,12 @@ public class JRPdfExporter extends JRAbstractExporter<PdfReportConfiguration, Pd
 	{
 		return 
 			super.getOffsetY() 
-			+ (insideFrame() ? 0 : (crtDocumentPageNumber % 2 == 0 
-				? crtEvenPageOffsetY 
-				: crtOddPageOffsetY));
+			+ (insideFrame() 
+				? 0 
+				: (crtPageOffsetY 
+					+ (crtDocumentPageNumber % 2 == 0 
+						? crtEvenPageOffsetY 
+						: crtOddPageOffsetY)));
 	}
 
 
